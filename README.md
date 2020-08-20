@@ -34,3 +34,9 @@ Note that this project does not use the normal baud rate, it uses `115200`!
 
 # Documentation
 Find the docs in [Documentation.md](Documentation.md)
+
+
+# TODO 
+
+- Image over structure/architecture
+- Reasoning behind the sensor interval
