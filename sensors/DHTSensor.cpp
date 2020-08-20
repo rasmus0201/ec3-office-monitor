@@ -12,25 +12,22 @@ DHTSensor::DHTSensor(PinName pin, int sleep) : sensor(pin, DHT22)
 
 bool DHTSensor::Run(DataManager* manager)
 {
-    // eError dhtErr = this->sensor.readData();
+    eError dhtErr = this->sensor.readData();
+    if (dhtErr != eError::ERROR_NONE) {
+        return false;
+    }
 
-    // if (dhtErr != eError::ERROR_NONE) {
-    //     return false;
-    // }
+    CollectionElement elTemp;
+    elTemp.type = "temperature";
+    elTemp.value = sensor.ReadTemperature(CELCIUS);
+    elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
+    manager->dataStore->Push(elTemp);
 
-    // CollectionElement elTemp;
-    // elTemp.type = "temperature";
-    // elTemp.value = sensor.ReadTemperature(CELCIUS);
-    // elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
-    // manager->dataStore->Push(elTemp);
-
-    // CollectionElement elHumid;
-    // elHumid.type = "humidity";
-    // elHumid.value = sensor.ReadHumidity();
-    // elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
-    // manager->dataStore->Push(elHumid);
-
-    printf("DHTSensor::Run()\n");
+    CollectionElement elHumid;
+    elHumid.type = "humidity";
+    elHumid.value = sensor.ReadHumidity();
+    elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
+    manager->dataStore->Push(elHumid);
 
     return true;
 }
@@ -41,4 +38,9 @@ void DHTSensor::SetName(std::string name) {
 
 std::string DHTSensor::GetName() {
     return this->name;
+}
+
+std::chrono::milliseconds DHTSensor::GetSleepTimeout()
+{
+    return this->sleepFor;
 }

@@ -10,9 +10,9 @@ SensorManager::SensorManager(DataManager* manager)
     this->dataManager = manager;
 }
 
-void SensorManager::AddSensorIn(SensorInterface* sensor)
+void SensorManager::AddSensor(SensorInterface* sensor)
 {
-    this->sensorsIn.push_back(sensor);
+    this->sensors.push_back(sensor);
 }
 
 void SensorManager::Run()
@@ -22,51 +22,38 @@ void SensorManager::Run()
 
 void SensorManager::Work()
 {
+    uint64_t currentMillis = 0;
+    uint64_t prevMillisArr[this->sensors.size()];
+
+    // Init array to all 0's
+    for(int i = 0; i < this->sensors.size(); i++) {
+        prevMillisArr[i] = 0;
+    }
+    
     while(true) {
-        for (auto &sensor : this->sensorsIn) {
-            sensor->Run(this->dataManager);
+        currentMillis = this->dataManager->GetRtc()->GetTimestampMS();
+
+        int i = 0;
+        for (auto &sensor : this->sensors) {
+            
+            // If the difference between now and the sensor's previous run-time is
+            // greater than it's run-interval then it is eligable to run again
+            if (currentMillis - prevMillisArr[i] >= sensor->GetSleepTimeout().count()) {
+                if (sensor->Run(this->dataManager)) {
+                    // printf("%llu: Sensor %s run was good\n", currentMillis, sensor->GetName().c_str());
+                    prevMillisArr[i] = currentMillis;
+                }
+            }
+
+            i++;
         }
 
-        ThisThread::sleep_for(1000ms);
+        // Small thread delay
+        ThisThread::sleep_for(1ms);
     }
-
-    // uint64_t currentMillis = 0;
-    // uint64_t prevMillisArr[this->sensorsIn.size()];
-
-    // // Init array to all 0's
-    // for(int i = 0; i < this->sensorsIn.size(); i++) {
-    //     prevMillisArr[i] = 0;
-    // }
-
-    // while(true) {
-    //     currentMillis = this->dataManager->GetRtc()->GetTimestampMS();
-
-    //     printf("Current millis: %llu\n", currentMillis);
-
-    //     int i = 0;
-    //     for (auto &sensor : this->sensorsIn) {
-    //         uint64_t prevMillis = prevMillisArr[i];
-
-    //         printf("Sensor i= %i, addr= %p, name= %s\n", i, (void*)sensor, sensor->GetName().c_str());
-            
-    //         // if (currentMillis - prevMillis >= sensor->GetSleepTimeout()) {
-    //         //     prevMillisArr[i] = currentMillis;
-    //         //     printf("Sensor %s timeout=%llu\n", sensor->GetName().c_str(), sensor->GetSleepTimeout());
-    //         //     printf("Running for sensor... diff = %llu\n", currentMillis - prevMillis);
-    //         //     // if (sensor->Run(this->dataManager)) {
-    //         //     //     printf("Sensor run was good\n");
-    //         //     //     prevMillis = currentMillis;
-    //         //     // }
-    //         // }
-
-    //         i++;
-    //     }
-
-    //     ThisThread::sleep_for(1000ms);
-    // }
 }
 
-std::vector<SensorInterface*>* SensorManager::GetSensorsIn()
+std::vector<SensorInterface*>* SensorManager::GetSensors()
 {
-    return &this->sensorsIn;
+    return &this->sensors;
 }
