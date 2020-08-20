@@ -17,18 +17,15 @@ bool LightSensor::Run(DataManager* manager)
     // el.value = (float)sensor.read_u16();
     // manager->dataStore->Push(el);
 
+    printf("LightSensor::Run()\n");
+
     return true;
 }
 
-void LightSensor::SetName(string name) {
+void LightSensor::SetName(std::string name) {
     this->name = name;
 }
 
-string LightSensor::GetName() {
+std::string LightSensor::GetName() {
     return this->name;
-}
-
-uint64_t LightSensor::GetSleepTimeout() {
-    printf("LightSensor::GetSleepTimeout = %llu\n", this->sleepFor.count());
-    return this->sleepFor.count();
 }

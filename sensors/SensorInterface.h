@@ -13,9 +13,8 @@ namespace Bundsgaard
     {
         public:
             virtual bool Run(DataManager *manager) = 0;
-            virtual void SetName(string name) = 0;
+            virtual void SetName(std::string name) = 0;
             virtual std::string GetName() = 0;
-            virtual uint64_t GetSleepTimeout() = 0;
 
         protected:
             std::string name;
