@@ -12,25 +12,24 @@ DHTSensor::DHTSensor(PinName pin, int sleep) : sensor(pin, DHT22)
 
 bool DHTSensor::Run(DataManager* manager)
 {
-    // eError dhtErr = this->sensor.readData();
-
-    // if (dhtErr != eError::ERROR_NONE) {
-    //     return false;
-    // }
-
-    // CollectionElement elTemp;
-    // elTemp.type = "temperature";
-    // elTemp.value = sensor.ReadTemperature(CELCIUS);
-    // elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
-    // manager->dataStore->Push(elTemp);
-
-    // CollectionElement elHumid;
-    // elHumid.type = "humidity";
-    // elHumid.value = sensor.ReadHumidity();
-    // elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
-    // manager->dataStore->Push(elHumid);
+    eError dhtErr = this->sensor.readData();
+    if (dhtErr != eError::ERROR_NONE) {
+        return false;
+    }
 
     printf("DHTSensor::Run()\n");
+
+    CollectionElement elTemp;
+    elTemp.type = "temperature";
+    elTemp.value = sensor.ReadTemperature(CELCIUS);
+    elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
+    manager->dataStore->Push(elTemp);
+
+    CollectionElement elHumid;
+    elHumid.type = "humidity";
+    elHumid.value = sensor.ReadHumidity();
+    elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
+    manager->dataStore->Push(elHumid);
 
     return true;
 }

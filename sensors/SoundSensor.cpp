@@ -11,13 +11,13 @@ SoundSensor::SoundSensor(PinName pin, int sleep) : sensor(pin)
 
 bool SoundSensor::Run(DataManager* manager)
 {
-    // CollectionElement el;
-    // el.type = "sound";
-    // el.timestamp = manager->GetRtc()->GetTimestampMS();
-    // el.value = (float)sensor.read_u16();
-    // manager->dataStore->Push(el);
-
     printf("SoundSensor::Run()\n");
+
+    CollectionElement el;
+    el.type = "sound";
+    el.timestamp = manager->GetRtc()->GetTimestampMS();
+    el.value = (float)sensor.read_u16();
+    manager->dataStore->Push(el);
 
     return true;
 }

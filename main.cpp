@@ -95,13 +95,13 @@ void setup()
     SensorManager* manager = new SensorManager(dataManager);
 
     printf("Setting up sensors\n");
-    SoundSensor* soundSensor = new SoundSensor(A0, 2100);
+    SoundSensor* soundSensor = new SoundSensor(A0, SOUND_SENSOR_DELAY);
     soundSensor->SetName(std::string("Sound"));
 
-    LightSensor* lightSensor = new LightSensor(A1, 2200);
+    LightSensor* lightSensor = new LightSensor(A1, LIGHT_SENSOR_DELAY);
     lightSensor->SetName(std::string("Light"));
 
-    DHTSensor* dhtSensor = new DHTSensor(D4, 2300);
+    DHTSensor* dhtSensor = new DHTSensor(D4, DHT_SENSOR_DELAY);
     dhtSensor->SetName(std::string("DHT"));
 
     manager->AddSensorIn(soundSensor);
