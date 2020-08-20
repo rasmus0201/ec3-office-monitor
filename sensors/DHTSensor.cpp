@@ -17,8 +17,6 @@ bool DHTSensor::Run(DataManager* manager)
         return false;
     }
 
-    printf("DHTSensor::Run()\n");
-
     CollectionElement elTemp;
     elTemp.type = "temperature";
     elTemp.value = sensor.ReadTemperature(CELCIUS);
@@ -40,4 +38,9 @@ void DHTSensor::SetName(std::string name) {
 
 std::string DHTSensor::GetName() {
     return this->name;
+}
+
+std::chrono::milliseconds DHTSensor::GetSleepTimeout()
+{
+    return this->sleepFor;
 }

@@ -11,8 +11,6 @@ SoundSensor::SoundSensor(PinName pin, int sleep) : sensor(pin)
 
 bool SoundSensor::Run(DataManager* manager)
 {
-    printf("SoundSensor::Run()\n");
-
     CollectionElement el;
     el.type = "sound";
     el.timestamp = manager->GetRtc()->GetTimestampMS();
@@ -28,4 +26,9 @@ void SoundSensor::SetName(std::string name) {
 
 std::string SoundSensor::GetName() {
     return this->name;
+}
+
+std::chrono::milliseconds SoundSensor::GetSleepTimeout()
+{
+    return this->sleepFor;
 }

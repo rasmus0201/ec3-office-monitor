@@ -18,6 +18,7 @@ namespace Bundsgaard
             bool Run(DataManager *manager);
             void SetName(std::string name);
             std::string GetName();
+            std::chrono::milliseconds GetSleepTimeout();
 
         private:
             DHT sensor;

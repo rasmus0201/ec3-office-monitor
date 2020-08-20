@@ -11,8 +11,6 @@ LightSensor::LightSensor(PinName pin, int sleep) : sensor(pin)
 
 bool LightSensor::Run(DataManager* manager)
 {
-    printf("LightSensor::Run()\n");
-
     CollectionElement el;
     el.type = "light";
     el.timestamp = manager->GetRtc()->GetTimestampMS();
@@ -28,4 +26,9 @@ void LightSensor::SetName(std::string name) {
 
 std::string LightSensor::GetName() {
     return this->name;
+}
+
+std::chrono::milliseconds LightSensor::GetSleepTimeout()
+{
+    return this->sleepFor;
 }
