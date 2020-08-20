@@ -32,10 +32,6 @@ Location* location = new Location(DEVICE_ID);
 Display display(manager, location);
 
 void setup();
-void setupDisplay();
-void setupTouch();
-void loop();
-
 void btnMenuChangerCallback();
 
 int main()
@@ -58,6 +54,8 @@ void setup()
 {
     display.TextCentered("OFFICE MONITOR");
     display.Delay(1000);
+
+    printf("Getting default network instance\n");
     display.Clear();
     display.TextCentered("Initializing network...");
 
@@ -81,6 +79,7 @@ void setup()
         exit(-1);
     }
 
+    printf("Setting up RTC\n");
     display.Clear();
     display.TextCentered("Setting RTC...");
     Rtc* rtc = new Rtc(NTP_SYNC_INTERVAL);
@@ -88,25 +87,34 @@ void setup()
 
     display.Clear();
     display.TextCentered("Initializing sensors...");
-    SensorManager* manager = new SensorManager(new DataManager(rtc));
 
-    SoundSensor soundSensor(A0, SOUND_SENSOR_DELAY);
-    soundSensor.SetName("Sound");
+    printf("Setting up data manager\n");
+    DataManager* dataManager = new DataManager(rtc);
 
-    LightSensor lightSensor(A1, LIGHT_SENSOR_DELAY);
-    lightSensor.SetName("Light");
+    printf("Setting up sensor manager\n");
+    SensorManager* manager = new SensorManager(dataManager);
 
-    DHTSensor dhtSensor(D4, DHT_SENSOR_DELAY);
-    dhtSensor.SetName("DHT");
+    printf("Setting up sensors\n");
+    SoundSensor* soundSensor = new SoundSensor(A0, 2100);
+    soundSensor->SetName(std::string("Sound"));
 
-    manager->AddSensorIn(&soundSensor);
-    manager->AddSensorIn(&lightSensor);
-    manager->AddSensorIn(&dhtSensor);
-    manager->Run();
+    LightSensor* lightSensor = new LightSensor(A1, 2200);
+    lightSensor->SetName(std::string("Light"));
 
+    DHTSensor* dhtSensor = new DHTSensor(D4, 2300);
+    dhtSensor->SetName(std::string("DHT"));
+
+    manager->AddSensorIn(soundSensor);
+    manager->AddSensorIn(lightSensor);
+    manager->AddSensorIn(dhtSensor);
+
+    printf("Setting location\n");
     location->SetBuilding("MU8");
     location->SetRoom("R22");
     button.rise(&btnMenuChangerCallback);
+
+    printf("Running manager\n");
+    manager->Run();
 }
 
 void btnMenuChangerCallback()

@@ -1,4 +1,3 @@
-#include <map>
 #include <string>
 #include "DHTSensor.h"
 #include "DataManager.h"
@@ -31,18 +30,15 @@ bool DHTSensor::Run(DataManager* manager)
     // elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
     // manager->dataStore->Push(elHumid);
 
+    printf("DHTSensor::Run()\n");
+
     return true;
 }
 
-void DHTSensor::SetName(string name) {
+void DHTSensor::SetName(std::string name) {
     this->name = name;
 }
 
-string DHTSensor::GetName() {
+std::string DHTSensor::GetName() {
     return this->name;
-}
-
-uint64_t DHTSensor::GetSleepTimeout() {
-    printf("DHTSensor::GetSleepTimeout = %llu\n", this->sleepFor.count());
-    return this->sleepFor.count();
 }

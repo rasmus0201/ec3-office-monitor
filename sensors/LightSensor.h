@@ -14,13 +14,15 @@ namespace Bundsgaard
     {
         public:
             LightSensor(PinName pin, int sleep);
-            bool Run(DataManager* manager);
-            void SetName(string name);
-            string GetName();
-            uint64_t GetSleepTimeout();
+            bool Run(DataManager *manager);
+            void SetName(std::string name);
+            std::string GetName();
 
         private:
             AnalogIn sensor;
+            
+            std::string name;
+            std::chrono::milliseconds sleepFor;
     };
 }
 
