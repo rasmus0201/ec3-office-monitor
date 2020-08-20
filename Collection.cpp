@@ -13,6 +13,7 @@ void Collection::Push(CollectionElement value)
 void Collection::Clear()
 {
     this->c.clear();
+    this->c.shrink_to_fit();
 }
 
 int Collection::Size()

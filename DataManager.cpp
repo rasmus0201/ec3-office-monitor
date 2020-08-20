@@ -24,6 +24,15 @@ Rtc* DataManager::GetRtc()
 void DataManager::Setup()
 {
     this->net = NetworkInterface::get_default_instance();
+
+    if (this->net->get_connection_status() == NSAPI_STATUS_DISCONNECTED) {
+        nsapi_size_or_error_t result = this->net->connect();
+        if (result != 0) {
+            printf("Error! net->connect() returned: %d\n", result);
+            return;
+        }
+    }
+
     this->socket = new TCPSocket();
 
     if (this->socket->open(this->net) != NSAPI_ERROR_OK) {
@@ -51,47 +60,40 @@ void DataManager::Worker()
 {
     while (true) {
         if (this->dataStore->Size() >= 25) {
-            if (this->net->get_connection_status() == NSAPI_STATUS_DISCONNECTED) {
-                nsapi_size_or_error_t result = this->net->connect();
-                if (result != 0) {
-                    printf("Error! net->connect() returned: %d\n", result);
-
-                    continue;
-                }
-            }
-            
             this->PushToCloud();
         }
 
-        ThisThread::sleep_for(1000ms);
+        ThisThread::sleep_for(500ms);
     }
 }
 
 void DataManager::PushToCloud()
 {
-    printf("Push to cloud!\n");
-    std::string json = "{\"data\":";
-    json += this->dataStore->ToJson();
-    json += ",\"deviceId\":"+std::to_string(DEVICE_ID);
-    json += "}";
-    char body[json.size() + 1];
-	strcpy(body, json.c_str());
+    printf("Pushing to cloud!\n");
+    // std::string json = "{\"data\":";
+    // json += this->dataStore->ToJson();
+    // json += ",\"deviceId\":"+std::to_string(DEVICE_ID);
+    // json += "}";
+    // char* body = new char[json.size() + 1];
+	// strcpy(body, json.c_str());
 
-    HttpRequest* post_req = new HttpRequest(this->net, this->socket, HTTP_POST, this->apiUrl.c_str());
-    post_req->set_header("Content-Type", "application/json");
+    // {
+    //     HttpRequest* post_req = new HttpRequest(this->net, this->socket, HTTP_POST, this->apiUrl.c_str());
+    //     post_req->set_header("Content-Type", "application/json");
 
-    HttpResponse* res = post_req->send(body, strlen(body));
-    if (res) {
-        this->dataStore->Clear();
-        printf("Did push to cloud!\n");
+    //     if (post_req->send(body, strlen(body))) {
+    //         this->dataStore->Clear();
+    //         printf("Did push to cloud!\n");
+    //     } else {
+    //         nsapi_error_t err = post_req->get_error();
+    //         printf("HttpRequest failed (error code %d)\n", err);
+    //         // if (err == NSAPI_ERROR_NO_CONNECTION) {
+    //         //     return;
+    //         // }
+    //     }
+    // }
 
-        return;
-    }
+    // delete[] body;
 
-    nsapi_error_t err = post_req->get_error();
-    printf("HttpRequest failed (error code %d)\n", err);
-    if (err == NSAPI_ERROR_NO_CONNECTION) {
-        this->Setup();
-        return this->PushToCloud();
-    }
+    return;
 }
