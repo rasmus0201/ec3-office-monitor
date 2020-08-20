@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @author Rasmus Sørensen (bundsgaard.rasmus@gmail.com)
+ * @brief Main file
+ * @version 0.1
+ * @date 2020-08-20
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
+
 #include <string>
 #include "mbed.h"
 #include "mbedtls_entropy_config.h"
@@ -11,6 +22,7 @@
 #include "Location.h"
 #include "Sensors.h"
 #include "SensorManager.h"
+
 
 /** PINOUT
  * Led = D2
@@ -31,9 +43,23 @@ SensorManager* manager;
 Location* location = new Location(DEVICE_ID);
 Display display(manager, location);
 
+/**
+ * @brief Setup everything
+ * 
+ */
 void setup();
-void btnMenuChangerCallback();
 
+/**
+ * @brief Interrupt Callback for the button to change the screen state
+ * 
+ */
+void btScreenChangerCallback();
+
+/**
+ * @brief Main program
+ * 
+ * @return int 
+ */
 int main()
 {
     printf("Starting office monitor program\n");
@@ -104,21 +130,27 @@ void setup()
     DHTSensor* dhtSensor = new DHTSensor(D4, DHT_SENSOR_DELAY);
     dhtSensor->SetName(std::string("DHT"));
 
-    manager->AddSensorIn(soundSensor);
-    manager->AddSensorIn(lightSensor);
-    manager->AddSensorIn(dhtSensor);
+    manager->AddSensor(soundSensor);
+    manager->AddSensor(lightSensor);
+    manager->AddSensor(dhtSensor);
 
     printf("Setting location\n");
     location->SetBuilding("MU8");
     location->SetRoom("R22");
-    button.rise(&btnMenuChangerCallback);
+    button.rise(&btScreenChangerCallback);
 
     printf("Running manager\n");
     manager->Run();
 }
 
-void btnMenuChangerCallback()
+void btScreenChangerCallback()
 {
-    // -1 -> 0, 0 -> 1, 1 -> 2, 2 -> 0
+    // Algorithm:
+    // By using modulus the screen state will circulate states like: 
+    // -1 -> 0
+    // 0 -> 1
+    // 1 -> 2
+    // 2 -> 0
+    // 0 -> 1, etc...
     display.currentState = static_cast<DisplayScreen>((display.currentState + 1) % 3);
 }
