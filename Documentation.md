@@ -30,6 +30,19 @@ Lidt om det biblioteker der er brugt:
     - `mbed-http-client` Det er også et bibliotek fra mbed's egen side, men da det var lavet til Mbed OS 5 skulle jeg lave lidt om i det (fx. bruge `SocketAddress`) det burde virke nu.
     - `mbed-rtc` Er en overbygning til Mbeds `ntp-client`. Det er meningen at RTC bare sættes helt automatisk og udover det så er det normale `time(NULL)` kun timestamps hvert sekund. Jeg har lavet det så man også kan få millisekunds-timestamp vha. en `Ticker`.
 
+### Diagram over classes og threads:
+
+* Kasser med samme farve er på samme tråd
+* Pilenes retning: Hvordan klasserne bruges igennem hinanden.
+* Pilenes farve: Hvordan et objekt bliver ført rundt i systemet
+
+![](docs/img/class_thread_diagram.png)
+
+### Diagram over virkemåde (flowchart)
+
+![](docs/img/flowchart.png)
+
+
 ## 2. Map over sensorer / PINOUT
 
 - LCD/Touch screen:

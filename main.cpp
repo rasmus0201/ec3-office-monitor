@@ -98,7 +98,7 @@ void setup()
     // Connect to the network with the default networking interface
     nsapi_size_or_error_t result = net->connect();
     if (result != 0) {
-         display.Clear();
+        display.Clear();
         display.FontBig();
         display.TextCentered("ERR: Could not connect to internet!");
         printf("Error! net->connect() returned: %d\n", result);
