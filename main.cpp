@@ -39,9 +39,7 @@ InterruptIn button(D6);
 DigitalOut led(D2);
 DigitalOut buzzer(D5);
 
-SensorManager* manager;
-Location* location = new Location(DEVICE_ID);
-Display display(manager, location);
+Display display;
 
 /**
  * @brief Setup everything
@@ -57,10 +55,11 @@ void setup();
 int main()
 {
     printf("Starting office monitor program\n");
+
     display.SetStartVariables();
     display.Setup();
     display.Clear();
-    
+
     setup();
 
     display.Loop();
@@ -133,10 +132,14 @@ void setup()
     manager->AddSensor(dhtSensor);
 
     printf("Setting location\n");
+    Location* location = new Location(DEVICE_ID);
     location->SetBuilding("MU8");
     location->SetRoom("R22");
     button.rise(callback(&display, &Display::ScreenChangerCallback));
 
     printf("Running manager\n");
     manager->Run();
+    
+    display.SetManager(manager);
+    display.SetLocation(location);
 }

@@ -42,57 +42,69 @@ namespace Bundsgaard
         public:
             /**
              * @brief Construct a new Display object
-             * 
-             * @param manager 
-             * @param location 
+             *
              */
-            Display(SensorManager* manager, Location* location);
+            Display();
+
+            /**
+             * @brief Set the sensor manager object
+             * 
+             * @param manager
+             */
+            void SetManager(SensorManager* manager);
+            
+            /**
+             * @brief Set the location object
+             * 
+             * @param location
+             */
+            void SetLocation(Location* location);
 
             /**
              * @brief Initialize the screen
-             * 
+             *
              */
             void Setup();
 
             /**
              * @brief Clear the screen
-             * 
+             *
              */
             void Clear();
 
             /**
              * @brief Set the starting variables
-             * 
+             *
              */
             void SetStartVariables();
 
             /**
              * @brief Set the loop variables
-             * 
+             *
              */
             void SetLoopVariables();
 
             /**
              * @brief Set the font to small
-             * 
+             *
              */
             void FontSmall();
 
             /**
              * @brief Set the font to medium
-             * 
+             *
              */
             void FontMedium();
 
             /**
              * @brief Set the font to big
-             * 
+             *
              */
             void FontBig();
 
             /**
              * @brief Delay the screen (HAL_Delay)
-             * 
+             *
              * @param delay 
              */
             void Delay(uint32_t delay);
@@ -100,7 +112,7 @@ namespace Bundsgaard
             /**
              * @brief Display vertially and horizontally centered string.
              *        The y-position can be at an offset up or down.
-             * 
+             *
              * @param text 
              * @param yOffset 
              */
@@ -108,7 +120,7 @@ namespace Bundsgaard
 
             /**
              * @brief Display left-aligned text
-             * 
+             *
              * @param text 
              * @param yOffset 
              */
@@ -116,7 +128,7 @@ namespace Bundsgaard
 
             /**
              * @brief Display right-aligned text
-             * 
+             *
              * @param text 
              * @param yOffset 
              */
@@ -124,7 +136,7 @@ namespace Bundsgaard
 
             /**
              * @brief Display right-aligned text
-             * 
+             *
              * @param textLeft
              * @param textRight
              * @param yOffset 
@@ -133,37 +145,37 @@ namespace Bundsgaard
 
             /**
              * @brief Start the display loop. Will set variables and start thread.
-             * 
+             *
              */
             void Loop();
 
             /**
              * @brief The method for the display thread
-             * 
+             *
              */
             void Worker();
 
             /**
              * @brief Show the home screen
-             * 
+             *
              */
             void ShowHome();
 
             /**
              * @brief Show the location screen
-             * 
+             *
              */
             void ShowLocation();
 
             /**
              * @brief Show the data screen
-             * 
+             *
              */
             void ShowData();
 
             /**
              * @brief Interrupt callback of the screen state changingn mechanism
-             * 
+             *
              */
             void ScreenChangerCallback();
 

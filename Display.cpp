@@ -12,11 +12,19 @@
 
 using namespace Bundsgaard;
 
-Display::Display(SensorManager* manager, Location* location)
+Display::Display()
+{
+    this->SetStartVariables();
+}
+
+void Display::SetManager(SensorManager* manager)
 {
     this->manager = manager;
+}
+
+void Display::SetLocation(Location* location)
+{
     this->location = location;
-    this->SetStartVariables();
 }
 
 void Display::Setup()
@@ -53,8 +61,13 @@ void Display::Worker()
     while(true) {
         BSP_TS_GetState(&TS_State);
 
+        if (this->currentState == this->prevState && this->currentState == DisplayScreen::DATA) {
+            this->ShowData();
+        }
+
         if (this->currentState != this->prevState) {
-            printf("Current: %d, prev = %d\n", this->currentState, this->prevState);  
+            this->Clear();
+
             switch(this->currentState) {
                 case DisplayScreen::NO_STATE:
                     this->ShowHome();
@@ -96,18 +109,24 @@ void Display::ShowLocation()
 
 void Display::ShowData()
 {
-    this->Clear();
+    for (int i = 1; i < 10; i++) {
+        BSP_LCD_ClearStringLine(LINE(i));
+    }
 
-    this->TextSpaceBetween("Lokation:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
+    this->TextSpaceBetween("Location:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
 
-    Collection* collection = this->manager->GetDataCollection();
+    Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = collection->Keys();
 
+    int precisionVal = 2;
     int lineNo = 1;
     for (auto &element : keys) {
+        float avg = collection->Average(element);
+        std::string averagePrecision = std::to_string(avg).substr(0, std::to_string(avg).find(".") + precisionVal + 1);
+       
         this->TextSpaceBetween(
             element + ":",
-            std::to_string(collection->Average(element)),
+            averagePrecision,
             LINE(lineNo)
         );
         
