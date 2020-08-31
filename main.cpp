@@ -50,12 +50,6 @@ Display display(manager, location);
 void setup();
 
 /**
- * @brief Interrupt Callback for the button to change the screen state
- * 
- */
-void btScreenChangerCallback();
-
-/**
  * @brief Main program
  * 
  * @return int 
@@ -81,6 +75,8 @@ void setup()
     display.TextCentered("OFFICE MONITOR");
     display.Delay(1000);
 
+#if RUN_WITH_NETWORK
+
     printf("Getting default network instance\n");
     display.Clear();
     display.TextCentered("Initializing network...");
@@ -105,10 +101,12 @@ void setup()
         exit(-1);
     }
 
+#endif
+
     printf("Setting up RTC\n");
     display.Clear();
     display.TextCentered("Setting RTC...");
-    Rtc* rtc = new Rtc(NTP_SYNC_INTERVAL);
+    Rtc* rtc = new Rtc(NTP_SYNC_INTERVAL, !RUN_WITH_NETWORK);
     rtc->Start();
 
     display.Clear();
@@ -137,20 +135,8 @@ void setup()
     printf("Setting location\n");
     location->SetBuilding("MU8");
     location->SetRoom("R22");
-    button.rise(&btScreenChangerCallback);
+    button.rise(callback(&display, &Display::ScreenChangerCallback));
 
     printf("Running manager\n");
     manager->Run();
-}
-
-void btScreenChangerCallback()
-{
-    // Algorithm:
-    // By using modulus the screen state will circulate states like: 
-    // -1 -> 0
-    // 0 -> 1
-    // 1 -> 2
-    // 2 -> 0
-    // 0 -> 1, etc...
-    display.currentState = static_cast<DisplayScreen>((display.currentState + 1) % 3);
 }

@@ -1,4 +1,5 @@
 #include <vector>
+#include "Collection.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
 #include "SensorManager.h"
@@ -49,11 +50,16 @@ void SensorManager::Work()
         }
 
         // Small thread delay
-        ThisThread::sleep_for(1ms);
+        ThisThread::sleep_for(5ms);
     }
 }
 
-std::vector<SensorInterface*>* SensorManager::GetSensors()
+std::vector<SensorInterface*> SensorManager::GetSensors()
 {
-    return &this->sensors;
+    return this->sensors;
+}
+
+Collection* SensorManager::GetDataCollection()
+{
+    return this->dataManager->dataStore;
 }

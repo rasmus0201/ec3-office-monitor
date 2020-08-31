@@ -1,4 +1,5 @@
-#include <map>
+#include <vector>
+#include <algorithm>
 #include <string>
 #include "Collection.h"
 #include "CollectionElement.h"
@@ -21,15 +22,40 @@ int Collection::Size()
     return this->c.size();
 }
 
-float Collection::Average()
+vector<std::string> Collection::Keys()
 {
-    float avg;
+    vector<std::string> keys;
 
     for (auto &element : this->c) {
-        avg += element.value;
-    }    
+        keys.push_back(element.type);
+    }
 
-    return avg/this->Size();
+    std::sort(keys.begin(), keys.end());
+    keys.erase(
+        std::unique(keys.begin(), keys.end()),
+        keys.end()
+    );
+    keys.shrink_to_fit();
+
+    return keys;
+}
+
+float Collection::Average(std::string key)
+{
+    int size = this->Size();
+    float avg = 0;
+
+    if (size == 0) {
+        return 0;
+    }
+
+    for (auto &element : this->c) {
+        if (element.type == key) {
+            avg += element.value;
+        }
+    }
+
+    return avg/size;
 }
 
 std::string Collection::ToJson()

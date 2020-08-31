@@ -11,10 +11,14 @@ using namespace Bundsgaard;
 DataManager::DataManager(Rtc* rtc)
 {
     this->apiUrl = "http://ec2-api.rasmusbundsgaard.dk/api/v1/sensors";
-    this->Setup();
-    this->rtc = rtc;
     this->dataStore = new Collection();
+    this->rtc = rtc;
+
+#if RUN_WITH_NETWORK
+    this->Setup();
     this->thread.start(callback(this, &DataManager::Worker));
+#endif
+
 }
 
 Rtc* DataManager::GetRtc()

@@ -5,6 +5,8 @@
 #include "stm32746g_discovery_ts.h"
 #include "Display.h"
 #include "Location.h"
+#include "Collection.h"
+#include "CollectionElement.h"
 #include "SensorManager.h"
 #include "SensorInterface.h"
 
@@ -96,11 +98,21 @@ void Display::ShowData()
 {
     this->Clear();
 
-    // std::vector<SensorInterface *> sensors = *manager->GetSensorsIn();
-    // for (auto &sensor : sensors) {
-    //     printf("Sensor: %s | ", sensor->GetName().c_str());
-    //     printf("Value: %4.2f\n\n", sensor->GetDataManager()->dataStore->Average());
-    // }
+    this->TextSpaceBetween("Lokation:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
+
+    Collection* collection = this->manager->GetDataCollection();
+    vector<std::string> keys = collection->Keys();
+
+    int lineNo = 1;
+    for (auto &element : keys) {
+        this->TextSpaceBetween(
+            element + ":",
+            std::to_string(collection->Average(element)),
+            LINE(lineNo)
+        );
+        
+        lineNo++;
+    }
 }
 
 void Display::SetStartVariables()
@@ -148,4 +160,32 @@ void Display::TextCentered(std::string text, uint16_t yOffset)
     uint32_t screenHeight = BSP_LCD_GetYSize();
 
     BSP_LCD_DisplayStringAt(0, int((screenHeight / 2) - (fontHeight / 2)) + yOffset, (uint8_t *)text.c_str(), CENTER_MODE);
+}
+
+void Display::TextLeft(std::string text, uint16_t yOffset)
+{
+    BSP_LCD_DisplayStringAt(0, yOffset, (uint8_t *)text.c_str(), LEFT_MODE);
+}
+
+void Display::TextRight(std::string text, uint16_t yOffset)
+{
+    BSP_LCD_DisplayStringAt(0, yOffset, (uint8_t *)text.c_str(), RIGHT_MODE);
+}
+
+void Display::TextSpaceBetween(std::string textLeft, std::string textRight, uint16_t yOffset)
+{
+    this->TextLeft(textLeft, yOffset);
+    this->TextRight(textRight, yOffset);
+}
+
+void Display::ScreenChangerCallback()
+{
+    // Algorithm:
+    // By using modulus the screen state will circulate states like: 
+    // -1 -> 0
+    // 0 -> 1
+    // 1 -> 2
+    // 2 -> 0
+    // 0 -> 1, etc...
+    this->currentState = static_cast<DisplayScreen>((this->currentState + 1) % 3);
 }

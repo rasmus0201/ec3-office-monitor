@@ -28,7 +28,6 @@ namespace Bundsgaard
     class SoundSensor : public SensorInterface
     {
         public:
-            
             /**
              * @brief Construct a new Sound Sensor object
              * 

@@ -18,4 +18,6 @@
 #define LIGHT_SENSOR_DELAY 10000 // 10000
 #define SOUND_SENSOR_DELAY 1000 // 500
 
+#define RUN_WITH_NETWORK false
+
 #endif

@@ -107,6 +107,31 @@ namespace Bundsgaard
             void TextCentered(std::string text, uint16_t yOffset = 0);
 
             /**
+             * @brief Display left-aligned text
+             * 
+             * @param text 
+             * @param yOffset 
+             */
+            void TextLeft(std::string text, uint16_t yOffset = 0);
+
+            /**
+             * @brief Display right-aligned text
+             * 
+             * @param text 
+             * @param yOffset 
+             */
+            void TextRight(std::string text, uint16_t yOffset = 0);
+
+            /**
+             * @brief Display right-aligned text
+             * 
+             * @param textLeft
+             * @param textRight
+             * @param yOffset 
+             */
+            void TextSpaceBetween(std::string textLeft, std::string textRight, uint16_t yOffset = 0);
+
+            /**
              * @brief Start the display loop. Will set variables and start thread.
              * 
              */
@@ -135,6 +160,12 @@ namespace Bundsgaard
              * 
              */
             void ShowData();
+
+            /**
+             * @brief Interrupt callback of the screen state changingn mechanism
+             * 
+             */
+            void ScreenChangerCallback();
 
         public:
             enum DisplayScreen currentState = HOME;

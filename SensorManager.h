@@ -13,6 +13,7 @@
 #define BUNDSGAARD_SENSOR_MANAGER_H
 
 #include <vector>
+#include "Collection.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
 
@@ -60,9 +61,16 @@ namespace Bundsgaard
             /**
              * @brief Get the sensors
              * 
-             * @return std::vector<SensorInterface*>* 
+             * @return std::vector<SensorInterface*>
              */
-            std::vector<SensorInterface*>* GetSensors();
+            std::vector<SensorInterface*> GetSensors();
+
+            /**
+             * @brief Get the underlying data collection
+             * 
+             * @return Collection*
+             */
+            Collection* GetDataCollection();
 
         private:
             Thread thread;

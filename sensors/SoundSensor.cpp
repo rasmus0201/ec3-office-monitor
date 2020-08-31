@@ -20,11 +20,13 @@ bool SoundSensor::Run(DataManager* manager)
     return true;
 }
 
-void SoundSensor::SetName(std::string name) {
+void SoundSensor::SetName(std::string name)
+{
     this->name = name;
 }
 
-std::string SoundSensor::GetName() {
+std::string SoundSensor::GetName()
+{
     return this->name;
 }
 

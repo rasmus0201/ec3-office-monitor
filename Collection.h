@@ -50,11 +50,20 @@ namespace Bundsgaard
             int Size();
 
             /**
+             * @brief Get the collections keys (unique)
+             * 
+             * @return vector<std::string>
+             */
+            vector<std::string> Keys();
+
+            /**
              * @brief Get the average of the collection elements's value
+             * 
+             * @param key
              * 
              * @return float 
              */
-            float Average();
+            float Average(std::string key);
 
             /**
              * @brief Get the collection as a JSON string
