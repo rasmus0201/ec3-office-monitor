@@ -72,12 +72,10 @@ namespace Bundsgaard
              */
             std::string ToJson();
 
-        private:
-            // std::vector<CollectionElement> c;
+        public:
             std::map<std::string, vector<CollectionElement>> c;
-            
-            int keepSubelements = 10;
-            int maxSubelements = 50;
+            int keepSubelements = 5;
+            int maxSubelements = 35;
     };
 }
 

@@ -1,8 +1,12 @@
 #include <string>
 #include <vector>
+#include <ctime>
+#include <cctype>
+#include <algorithm>
 #include "mbed.h"
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
+#include "helpers.h"
 #include "Display.h"
 #include "Location.h"
 #include "Collection.h"
@@ -86,7 +90,7 @@ void Display::Worker()
             this->prevState = this->currentState;
         }
 
-        HAL_Delay(100);
+        HAL_Delay(50);
     }
 }
 
@@ -113,19 +117,43 @@ void Display::ShowData()
         BSP_LCD_ClearStringLine(LINE(i));
     }
 
+    this->FontMedium();
     this->TextSpaceBetween("Location:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
+    
+    time_t currentTime = time(NULL);
+    struct tm* localeTime;
+    localeTime = localtime(&currentTime);
+    
+    {
+        std::string dateTime = to_weekdayname(localeTime->tm_wday) + ". ";
+        dateTime += std::to_string(localeTime->tm_mday) + ". ";
+        dateTime += to_monthname(localeTime->tm_mon) + ".";
+
+        this->TextSpaceBetween("Date:", dateTime, LINE(1));
+    }
+
+    {
+        std::string strTime = pad_left(std::to_string(localeTime->tm_hour), 2) + ":";
+        strTime += pad_left(std::to_string(localeTime->tm_min), 2, '0') + ":";
+        strTime += pad_left(std::to_string(localeTime->tm_sec), 2, '0');
+        
+        this->TextSpaceBetween("Time:", strTime, LINE(2));
+    }
+    
 
     Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = collection->Keys();
 
     int precisionVal = 2;
-    int lineNo = 1;
+    int lineNo = 3;
     for (auto &element : keys) {
         float avg = collection->Average(element);
+        std::string name = element;
+        name[0] = std::toupper(name[0]);
         std::string averagePrecision = std::to_string(avg).substr(0, std::to_string(avg).find(".") + precisionVal + 1);
        
         this->TextSpaceBetween(
-            element + ":",
+            name + ":",
             averagePrecision,
             LINE(lineNo)
         );
@@ -151,6 +179,7 @@ void Display::Clear()
     BSP_LCD_Clear(this->background);
     BSP_LCD_SetBackColor(this->background);
     BSP_LCD_SetTextColor(this->color);
+    this->FontMedium();
 }
 
 void Display::FontSmall()
