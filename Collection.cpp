@@ -42,17 +42,20 @@ vector<std::string> Collection::Keys()
 
 float Collection::Average(std::string key)
 {
-    int size = this->Size();
+    int size = 0;
     float avg = 0;
+
+    for (auto &element : this->c) {
+        if (element.type != key) {
+            continue;
+        }
+
+        avg += element.value;
+        size++;
+    }
 
     if (size == 0) {
         return 0;
-    }
-
-    for (auto &element : this->c) {
-        if (element.type == key) {
-            avg += element.value;
-        }
     }
 
     return avg/size;
