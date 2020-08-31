@@ -41,7 +41,6 @@ void SensorManager::Work()
             // greater than it's run-interval then it is eligable to run again
             if (currentMillis - prevMillisArr[i] >= sensor->GetSleepTimeout().count()) {
                 if (sensor->Run(this->dataManager)) {
-                    // printf("%llu: Sensor %s run was good\n", currentMillis, sensor->GetName().c_str());
                     prevMillisArr[i] = currentMillis;
                 }
             }
