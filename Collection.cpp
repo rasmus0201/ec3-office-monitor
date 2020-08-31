@@ -8,13 +8,19 @@ using namespace Bundsgaard;
 
 void Collection::Push(CollectionElement value)
 {
-    this->c.push_back(value);
+    this->c[value.type].push_back(value);
+    
+    if (this->c[value.type].size() >= this->maxSubelements) {
+        this->c[value.type].erase(
+            this->c[value.type].begin(),
+            this->c[value.type].begin()+this->keepSubelements
+        );
+    }
 }
 
 void Collection::Clear()
 {
     this->c.clear();
-    this->c.shrink_to_fit();
 }
 
 int Collection::Size()
@@ -27,15 +33,8 @@ vector<std::string> Collection::Keys()
     vector<std::string> keys;
 
     for (auto &element : this->c) {
-        keys.push_back(element.type);
+        keys.push_back(element.first);
     }
-
-    std::sort(keys.begin(), keys.end());
-    keys.erase(
-        std::unique(keys.begin(), keys.end()),
-        keys.end()
-    );
-    keys.shrink_to_fit();
 
     return keys;
 }
