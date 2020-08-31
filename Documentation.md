@@ -76,7 +76,7 @@ Der er flere forskellige "områder" programmet gør sig i:
 - Display med forskellige "states":
     - Hjemmeskærm
     - Lokations-skærm
-    - Seneste data (WIP) - viser de seneste data samt nuværende tidspunkt
+    - Seneste data - viser de seneste data samt nuværende tidspunkt
     - Notifikation (WIP) - skal vise en notifikation fx. hvis det er for varmt i rummet. Her skal også blinkes med en LED.
 - Alarm (WIP) - Start buzzeren hvis lydniveauet er højt over en længere periode om aftenen/natten 
 
@@ -90,18 +90,19 @@ Notifikation skal vises med passelig besked på skærmen, når:
 
 ## 6. Væsentlige ændringer
 
-Først havde jeg en del tråde - jeg havde en tråd for hvert `DataManager` objekt samt en tråd for hver enkelt sensor. Altså bare sensor opsamlingen vil være 6 tråde (3*2) samtidig med det er er display tråden og en tråd for RTC og selvfølgelig main tråden. Det gjorde jeg ofte kom ud o `operator new out of memory` fejlen. Jeg fixede det, så alt data opsamling foregår på 1 tråd i stedet for 3 og 1 tråd for API-delen. Dette kan gøres med tidsintervaller og tidstempler for at undgå at blokere tråden. 
+Først havde jeg en del tråde - jeg havde en tråd for hvert `DataManager` objekt samt en tråd for hver enkelt sensor. Altså bare sensor opsamlingen vil være 6 tråde (3*2) samtidig med det er er display tråden og en tråd for RTC og selvfølgelig main tråden. Det gjorde jeg ofte kom ud o `operator new out of memory` fejlen. Jeg fixede det, så alt data opsamling foregår på 1 tråd i stedet for 3 og 1 tråd for API-delen. Dette kan gøres med tidsintervaller og tidstempler for at undgå at blokere tråden.
+
+Ændret `Collection` fra at bruge en `std::vector` til en `std::map`. Dette gjorde det noget nemmere at arbejde med de forskellige typer af opsamlingsdata seperat.
 
 ## 7. Problemer
 
 - Jeg vil gerne lave ednnu bedre memory performance for nogle gange crasher det stadigvæk. Dog tror jeg måske det "bare" har været under testing hvor jeg opsamler data meget ofte. Jeg har fundet frem til det har noget at gøre med HTTP request/response.
 - Problemer med at loop'e en `vector` med forskellige classes som implementere det samme interface / nedarver samme base class (**løst**)
-
+- Display'et kan ikke helt finde ud af at Clear linjen rigtigt hvis den forrige string er større længde en den nye (**løst (padded strings)**)
 
 ## 8. Fremtidige ændringer
 
-- Jeg vil gerne lave det så programmet kan kører "uendeligt", så det ikke crasher - eller hvis det gør at den kan genstarte selv. Kan også være trådene skal have defineret deres memory
-- Se sensor data på LCD display'et
+- Jeg vil gerne lave det så programmet kan kører "uendeligt", så det ikke crasher - eller hvis det gør at den kan genstarte selv. Kan også være trådene skal have defineret deres memory (**Har kørt en dag uden stop, så dette er muligvis blevet fikset**)
 - Lave notifikations-systemet
 - Alarm system
-- Brugeren kan ændre lokation via. display + gemme det i API'et, samt hente det ved opstart.
+- Brugeren kan ændre lokation via. API'et. Når EC starter henter den location.
