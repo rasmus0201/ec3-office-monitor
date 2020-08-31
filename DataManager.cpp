@@ -70,7 +70,7 @@ void DataManager::Worker()
 {
     while (true) {
         // When the datastore becomes big enough - push it to the cloud
-        if (this->dataStore->Size() >= 25) {
+        if (this->dataStore->Size() >= 50) {
             this->PushToCloud();
         }
 

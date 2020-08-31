@@ -8,18 +8,35 @@ using namespace Bundsgaard;
 
 void Collection::Push(CollectionElement value)
 {
-    this->c.push_back(value);
+    this->c[value.type].push_back(value);
+    
+    if (this->c.at(value.type).size() >= this->maxSubelements) {
+        this->c.at(value.type).erase(
+            this->c.at(value.type).begin(),
+            this->c.at(value.type).begin() + (this->c.at(value.type).size() - this->keepSubelements)
+        );
+    }
 }
 
 void Collection::Clear()
 {
+    std::vector<std::string> keys = this->Keys();
     this->c.clear();
-    this->c.shrink_to_fit();
+    
+    for (auto &k : keys) {
+        this->c[k] = {};
+    }
 }
 
 int Collection::Size()
 {
-    return this->c.size();
+    int size = 0;
+    
+    for (auto &v : this->c) {
+        size += v.second.size();
+    }
+    
+    return size;
 }
 
 vector<std::string> Collection::Keys()
@@ -27,35 +44,29 @@ vector<std::string> Collection::Keys()
     vector<std::string> keys;
 
     for (auto &element : this->c) {
-        keys.push_back(element.type);
+        keys.push_back(element.first);
     }
 
     std::sort(keys.begin(), keys.end());
-    keys.erase(
-        std::unique(keys.begin(), keys.end()),
-        keys.end()
-    );
-    keys.shrink_to_fit();
 
     return keys;
 }
 
 float Collection::Average(std::string key)
 {
-    int size = 0;
-    float avg = 0;
-
-    for (auto &element : this->c) {
-        if (element.type != key) {
-            continue;
-        }
-
-        avg += element.value;
-        size++;
+    if (this->c.count(key) == 0) {
+        return 0;
     }
 
+    float avg = 0;
+    int size = this->c.at(key).size();
+    
     if (size == 0) {
         return 0;
+    }
+
+    for (auto &element : this->c.at(key)) {
+        avg += element.value;
     }
 
     return avg/size;
@@ -66,9 +77,11 @@ std::string Collection::ToJson()
     std::string json;
     json += "[";
 
-    for (auto &element : this->c) {
-        json += element.ToJson();
-        json += ",";
+    for (auto &v : this->c) {
+        for (auto &element : v.second) {
+            json += element.ToJson();
+            json += ",";
+        }
     }
     
     json.pop_back();
