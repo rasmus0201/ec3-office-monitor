@@ -144,8 +144,9 @@ void Display::ShowData()
     Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = collection->Keys();
 
-    int precisionVal = 2;
-    int lineNo = 3;
+    uint8_t paddedLength = 10;
+    uint8_t precisionVal = 2;
+    uint8_t lineNo = 3;
     for (auto &element : keys) {
         float avg = collection->Average(element);
         std::string name = element;
@@ -154,7 +155,7 @@ void Display::ShowData()
        
         this->TextSpaceBetween(
             name + ":",
-            averagePrecision,
+            pad_left(averagePrecision, paddedLength),
             LINE(lineNo)
         );
         
