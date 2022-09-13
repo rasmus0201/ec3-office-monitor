@@ -10,15 +10,12 @@ using namespace Bundsgaard;
 
 DataManager::DataManager(Rtc* rtc)
 {
-    this->apiUrl = "http://ec2-api.rasmusbundsgaard.dk/api/v1/sensors";
+    this->apiUrl = API_BASE_URL;
     this->dataStore = new Collection();
     this->rtc = rtc;
 
-#if RUN_WITH_NETWORK
     this->Setup();
     this->thread.start(callback(this, &DataManager::Worker));
-#endif
-
 }
 
 Rtc* DataManager::GetRtc()
@@ -70,13 +67,13 @@ void DataManager::Worker()
 {
     while (true) {
         // When the datastore becomes big enough - push it to the cloud
-        if (this->dataStore->Size() >= 50) {
+        if (this->dataStore->Size() >= DATA_MANAGER_MAX_ITEM_BEFORE_SYNC) {
             this->PushToCloud();
         }
 
         // We don't need to have this thread active all the time
         // So a delay to optimize timing for e.g. the sensor thread.
-        ThisThread::sleep_for(500ms);
+        ThisThread::sleep_for(DATA_MANAGER_LOOP_SLEEP_TIME);
     }
 }
 
@@ -87,14 +84,18 @@ void DataManager::PushToCloud()
     // Construct the request body as JSON formatted string
     std::string json = "{\"data\":";
     json += this->dataStore->ToJson();
-    json += ",\"deviceId\":"+std::to_string(DEVICE_ID);
     json += "}";
     char* body = new char[json.size() + 1];
 	strcpy(body, json.c_str());
 
     // Do an API request
     {
-        HttpRequest* post_req = new HttpRequest(this->net, this->socket, HTTP_POST, this->apiUrl.c_str());
+        HttpRequest* post_req = new HttpRequest(
+            this->net,
+            this->socket,
+            HTTP_POST,
+            (this->apiUrl + "/devices/" + std::to_string(DEVICE_ID) + "/measurements").c_str()
+        );
         post_req->set_header("Content-Type", "application/json");
         
         if (post_req->send(body, strlen(body))) {
@@ -113,6 +114,4 @@ void DataManager::PushToCloud()
     // Clear the datastore 
     this->dataStore->Clear();
     delete[] body;
-
-    return;
 }

@@ -74,8 +74,6 @@ void setup()
     display.TextCentered("OFFICE MONITOR");
     display.Delay(1000);
 
-#if RUN_WITH_NETWORK
-
     printf("Getting default network instance\n");
     display.Clear();
     display.TextCentered("Initializing network...");
@@ -100,12 +98,10 @@ void setup()
         exit(-1);
     }
 
-#endif
-
     printf("Setting up RTC\n");
     display.Clear();
     display.TextCentered("Setting RTC...");
-    Rtc* rtc = new Rtc(NTP_SYNC_INTERVAL, !RUN_WITH_NETWORK);
+    Rtc* rtc = new Rtc(NTP_SYNC_INTERVAL);
     rtc->Start();
 
     display.Clear();

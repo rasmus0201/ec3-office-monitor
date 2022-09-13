@@ -1,4 +1,5 @@
 #include <vector>
+#include "defs.h"
 #include "Collection.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
@@ -49,7 +50,7 @@ void SensorManager::Work()
         }
 
         // Small thread delay
-        ThisThread::sleep_for(5ms);
+        ThisThread::sleep_for(SENSOR_MANAGER_LOOP_SLEEP_TIME);
     }
 }
 
