@@ -17,8 +17,6 @@
 #include <string>
 #include "CollectionElement.h"
 
-using namespace Bundsgaard;
-
 namespace Bundsgaard
 {
     /**
@@ -52,9 +50,9 @@ namespace Bundsgaard
             /**
              * @brief Get the collections keys (unique)
              * 
-             * @return vector<std::string>
+             * @return vector<uint32_t>
              */
-            vector<std::string> Keys();
+            vector<uint32_t> Keys();
 
             /**
              * @brief Get the average of the collection elements's value
@@ -63,7 +61,7 @@ namespace Bundsgaard
              * 
              * @return float 
              */
-            float Average(std::string key);
+            float Average(uint32_t key);
 
             /**
              * @brief Get the collection as a JSON string
@@ -73,7 +71,7 @@ namespace Bundsgaard
             std::string ToJson();
 
         public:
-            std::map<std::string, vector<CollectionElement>> c;
+            std::map<uint32_t, vector<CollectionElement>> c;
             int keepSubelements = 5;
             int maxSubelements = 35;
     };

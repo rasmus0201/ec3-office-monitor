@@ -19,7 +19,7 @@ For this you will need the following software/hardware:
 - Mbed Studio (or the online compiler, or the CLI version)
 
 # Installation
-1. Clone this repository: `https://github.com/rasmus0201/ec2-office-monitor.git`
+1. Clone this repository: `https://github.com/rasmus0201/ec3-office-monitor.git`
 2. Make sure dependencies (libraries) are installed
    - mbed-os (version 6.2.1 - commit `890f0562dc2efb7cf76a5f010b535c2b94bce849`) (import from `https://github.com/ARMmbed/mbed-os.git`)
    - BSP_DISCO_F746NG (version commit `85dbcff443aa20e932494823e42c6d2a9550d17a`) (import from `https://os.mbed.com/teams/ST/code/BSP_DISCO_F746NG/`)

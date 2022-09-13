@@ -1,53 +1,34 @@
 #include <string>
 #include "Location.h"
 
-using namespace std;
 using namespace Bundsgaard;
 
-Location::Location(int deviceId)
+void Location::SetLocationId(uint32_t id)
 {
-    this->deviceId = deviceId;
+    this->locationId = id;
 }
 
-void Location::SetBuilding(string str)
+uint32_t Location::GetLocationId()
 {
-    this->building = str;
+    return this->locationId;
 }
 
-string Location::GetBuilding()
+void Location::SetLocationName(std::string str)
 {
-    return this->building;
+    this->locationName = str;
 }
 
-void Location::SetRoom(string str)
+std::string Location::GetLocationName()
 {
-    this->room = str;
+    return this->locationName;
 }
 
-string Location::GetRoom()
+void Location::SetDeviceName(std::string str)
 {
-    return this->room;
+    this->deviceName = str;
 }
 
-string Location::ToJson()
+std::string Location::GetDeviceName()
 {
-    string json = "{";
-
-    // Building
-    json += "\"building\":";
-    json += "\"";
-    json += this->building;
-    json += "\"";
-
-    json += ",";
-
-    // Room
-    json += "\"room\":";
-    json += "\"";
-    json += this->room;
-    json += "\"";
-
-    json += "}";
-
-    return json;
+    return this->deviceName;
 }

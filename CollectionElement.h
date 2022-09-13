@@ -36,7 +36,7 @@ namespace Bundsgaard
              * @brief Type of sensor
              * 
              */
-            std::string type;
+            uint32_t sensorId;
 
             /**
              * @brief The timestamp for the value

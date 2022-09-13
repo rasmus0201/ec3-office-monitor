@@ -15,6 +15,7 @@
 #include <string>
 #include "mbed.h"
 #include "Rtc.h"
+#include "ApiClient.h"
 #include "Collection.h"
 
 namespace Bundsgaard
@@ -30,18 +31,20 @@ namespace Bundsgaard
         public:
             /**
              * @brief Construct a new Data Manager object
-             * 
+             *
+             * @param apiClient
              * @param rtc 
              */
-            DataManager(Rtc* rtc);
+            DataManager(ApiClient* apiClient, Rtc* rtc);
 
             /**
-             * @brief Setup the manager. This will create a socket
-             *        to the API for reuse on each data-push
+             * @brief Get the Rtc object
              * 
+             * @return Rtc* 
              */
-            void Setup();
+            Rtc* GetRtc();
 
+        private:
             /**
              * @brief Push data online to the API
              * 
@@ -55,22 +58,13 @@ namespace Bundsgaard
              */
             void Worker();
 
-            /**
-             * @brief Get the Rtc object
-             * 
-             * @return Rtc* 
-             */
-            Rtc* GetRtc();
-        
         public:
             Collection* dataStore;
 
         private:
+            ApiClient* apiClient;
             Rtc* rtc;
             Thread thread;
-            std::string apiUrl;
-            NetworkInterface* net;
-            TCPSocket* socket;
     };
 }
 

@@ -24,51 +24,45 @@ namespace Bundsgaard
     {
         public:
             /**
-             * @brief Construct a new Location object
+             * @brief Set the location ID
              * 
-             * @param deviceId 
+             * @param id 
              */
-            Location(int deviceId);
+            void SetLocationId(uint32_t id);
 
             /**
-             * @brief Set the building name
+             * @brief Get the location ID
+             */
+            uint32_t GetLocationId();
+
+            /**
+             * @brief Set the location name
              * 
              * @param str 
              */
-            void SetBuilding(std::string str);
+            void SetLocationName(std::string str);
 
             /**
-             * @brief Get the building name
-             * 
-             * @return std::string 
+             * @brief Get the location name
              */
-            std::string GetBuilding();
+            std::string GetLocationName();
 
             /**
-             * @brief Set the room name
+             * @brief Set the device name
              * 
              * @param str 
              */
-            void SetRoom(std::string str);
+            void SetDeviceName(std::string str);
 
             /**
-             * @brief Get the room name
-             * 
-             * @return std::string 
+             * @brief Get the device name
              */
-            std::string GetRoom();
-
-            /**
-             * @brief Get the location as a JSON formatted string
-             * 
-             * @return std::string 
-             */
-            std::string ToJson();
+            std::string GetDeviceName();
         
         private:
-            int deviceId;
-            std::string building;
-            std::string room;
+            uint32_t locationId;
+            std::string locationName;
+            std::string deviceName;
     };
 }
 

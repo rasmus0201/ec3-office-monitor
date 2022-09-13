@@ -7,5 +7,10 @@
             "platform.stdio-convert-newlines": true,
             "target.network-default-interface-type": "ETHERNET"
         }
-    }
+    },
+    "macros": [
+        "MBED_HEAP_STATS_ENABLED=1",
+        "MBED_STACK_STATS_ENABLED=1",
+        "MBED_MEM_TRACING_ENABLED=1"
+    ]
 }

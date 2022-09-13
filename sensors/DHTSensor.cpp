@@ -17,27 +17,23 @@ bool DHTSensor::Run(DataManager* manager)
         return false;
     }
 
-    CollectionElement elTemp;
-    elTemp.type = "temperature";
-    elTemp.value = sensor.ReadTemperature(CELCIUS);
-    elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
-    manager->dataStore->Push(elTemp);
+    if (NULL != this->sensorManager->GetSensorIdFromName("temperature")) {
+        CollectionElement elTemp;
+        elTemp.sensorId = this->sensorManager->GetSensorIdFromName("temperature");
+        elTemp.value = sensor.ReadTemperature(CELCIUS);
+        elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
+        manager->dataStore->Push(elTemp);
+    }
 
-    CollectionElement elHumid;
-    elHumid.type = "humidity";
-    elHumid.value = sensor.ReadHumidity();
-    elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
-    manager->dataStore->Push(elHumid);
+    if (NULL != this->sensorManager->GetSensorIdFromName("humidity")) {
+        CollectionElement elHumid;
+        elHumid.sensorId = this->sensorManager->GetSensorIdFromName("humidity");
+        elHumid.value = sensor.ReadHumidity();
+        elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
+        manager->dataStore->Push(elHumid);
+    }
 
     return true;
-}
-
-void DHTSensor::SetName(std::string name) {
-    this->name = name;
-}
-
-std::string DHTSensor::GetName() {
-    return this->name;
 }
 
 std::chrono::milliseconds DHTSensor::GetSleepTimeout()

@@ -8,23 +8,23 @@ using namespace Bundsgaard;
 
 void Collection::Push(CollectionElement value)
 {
-    this->c[value.type].push_back(value);
+    this->c[value.sensorId].push_back(value);
     
-    if (this->c.at(value.type).size() >= this->maxSubelements) {
-        this->c.at(value.type).erase(
-            this->c.at(value.type).begin(),
-            this->c.at(value.type).begin() + (this->c.at(value.type).size() - this->keepSubelements)
+    if (this->c.at(value.sensorId).size() >= this->maxSubelements) {
+        this->c.at(value.sensorId).erase(
+            this->c.at(value.sensorId).begin(),
+            this->c.at(value.sensorId).begin() + (this->c.at(value.sensorId).size() - this->keepSubelements)
         );
     }
 }
 
 void Collection::Clear()
 {
-    std::vector<std::string> keys = this->Keys();
+    std::vector<uint32_t> keys = this->Keys();
     this->c.clear();
     
     for (auto &k : keys) {
-        this->c[k] = {};
+        this->c[k].clear();
     }
 }
 
@@ -39,9 +39,9 @@ int Collection::Size()
     return size;
 }
 
-vector<std::string> Collection::Keys()
+vector<uint32_t> Collection::Keys()
 {
-    vector<std::string> keys;
+    vector<uint32_t> keys;
 
     for (auto &element : this->c) {
         keys.push_back(element.first);
@@ -52,7 +52,7 @@ vector<std::string> Collection::Keys()
     return keys;
 }
 
-float Collection::Average(std::string key)
+float Collection::Average(uint32_t key)
 {
     if (this->c.count(key) == 0) {
         return 0;

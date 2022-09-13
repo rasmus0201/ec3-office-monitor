@@ -17,8 +17,6 @@
 #include "SensorInterface.h"
 #include "DataManager.h"
 
-using namespace Bundsgaard;
-
 namespace Bundsgaard
 {
     /**
@@ -46,20 +44,6 @@ namespace Bundsgaard
             bool Run(DataManager *manager);
 
             /**
-             * @brief Set the name of the sensor
-             * 
-             * @param name 
-             */
-            void SetName(std::string name);
-
-            /**
-             * @brief Get the name
-             * 
-             * @return std::string 
-             */
-            std::string GetName();
-
-            /**
              * @brief Get the Sleep Timeout
              * 
              * @return std::chrono::milliseconds 
@@ -68,7 +52,6 @@ namespace Bundsgaard
 
         private:
             AnalogIn sensor;
-            std::string name;
             std::chrono::milliseconds sleepFor;
     };
 }

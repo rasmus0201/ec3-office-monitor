@@ -15,7 +15,7 @@ WIP = Work In Progress
 
 ## 1. Beskrivelse af case:
 
-Jeg valgte denne case fordi jeg tænkte man kunne lave nogle meget fede ting med det. Programmet er sat op mod et API jeg har lavet som indsætter alt (eller det meste) af sensor dataen. Her har jeg lavet et lille interface på [en hjemmeside](http://ec2-api.rasmusbundsgaard.dk/) til at se data fra sensorene.
+Jeg valgte denne case fordi jeg tænkte man kunne lave nogle meget fede ting med det. Programmet er sat op mod et API jeg har lavet som indsætter alt (eller det meste) af sensor dataen. Her har jeg lavet et lille interface på [en hjemmeside](http://ec3-api.rasmusbundsgaard.dk/) til at se data fra sensorene.
 
 Min tanke var at holde mig forholdsvis meget til casen, men der er nogle punkter som jeg er sprunget over - fx. det med at arbejde med en servo eller stepper motor. Grunden til det var at:
     - Tiden var knap (har lavet mange andre ting)

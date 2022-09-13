@@ -107,8 +107,8 @@ void Display::ShowLocation()
 {
     this->Clear();
     this->FontBig();
-    this->TextCentered("Bygning: " + this->location->GetBuilding());
-    this->TextCentered("Lokale: " + this->location->GetRoom(), LINE(2));
+    this->TextCentered("Enhed: " + this->location->GetDeviceName());
+    this->TextCentered("Lokale: " + this->location->GetLocationName() + " (#" + std::to_string(this->location->GetLocationId()) + ")" , LINE(2));
 }
 
 void Display::ShowData()
@@ -118,7 +118,11 @@ void Display::ShowData()
     }
 
     this->FontMedium();
-    this->TextSpaceBetween("Location:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
+    this->TextSpaceBetween(
+        "Location:",
+        this->location->GetLocationName() + " #" + std::to_string(this->location->GetLocationId()),
+        LINE(0)
+    );
     
     time_t currentTime = time(NULL);
     struct tm* localeTime;
@@ -142,14 +146,18 @@ void Display::ShowData()
     
 
     Collection* collection = manager->GetDataCollection();
-    vector<std::string> keys = collection->Keys();
+    vector<uint32_t> keys = collection->Keys();
 
     uint8_t paddedLength = 10;
     uint8_t precisionVal = 2;
     uint8_t lineNo = 3;
-    for (auto &element : keys) {
-        float avg = collection->Average(element);
-        std::string name = element;
+    for (auto &sensorId : keys) {
+        std::string name = this->manager->GetSensorNameFromId(sensorId);
+        if (name.empty()) {
+            continue;
+        }
+        
+        float avg = collection->Average(sensorId);
         name[0] = std::toupper(name[0]);
         std::string averagePrecision = std::to_string(avg).substr(0, std::to_string(avg).find(".") + precisionVal + 1);
        
