@@ -36,7 +36,6 @@
 using namespace Bundsgaard;
 
 InterruptIn button(D6);
-DigitalOut led(D2);
 DigitalOut buzzer(D5);
 
 Display display;
