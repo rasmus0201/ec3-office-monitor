@@ -17,6 +17,7 @@
 #include "DHT.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
+#include "SensorManager.h"
 
 using namespace Bundsgaard;
 
@@ -32,10 +33,11 @@ namespace Bundsgaard
             /**
              * @brief Construct a new DHTSensor object
              * 
+             * @param sensorManager
              * @param pin 
              * @param sleep 
              */
-            DHTSensor(PinName pin, int sleep);
+            DHTSensor(SensorManager* sensorManager, PinName pin, int sleep);
 
             /**
              * @brief Run the data collecting for DHT sensor

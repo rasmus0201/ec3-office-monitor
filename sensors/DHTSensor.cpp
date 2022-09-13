@@ -5,8 +5,9 @@
 
 using namespace Bundsgaard;
 
-DHTSensor::DHTSensor(PinName pin, int sleep) : sensor(pin, DHT22)
+DHTSensor::DHTSensor(SensorManager* sensorManager, PinName pin, int sleep) : sensor(pin, DHT22)
 {
+    this->sensorManager = sensorManager;
     this->sleepFor = std::chrono::milliseconds(sleep);
 }
 
@@ -17,17 +18,21 @@ bool DHTSensor::Run(DataManager* manager)
         return false;
     }
 
-    CollectionElement elTemp;
-    elTemp.type = "temperature";
-    elTemp.value = sensor.ReadTemperature(CELCIUS);
-    elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
-    manager->dataStore->Push(elTemp);
+    if (this->sensorManager->IsSensorEnabled("temperature")) {
+        CollectionElement elTemp;
+        elTemp.type = "temperature";
+        elTemp.value = sensor.ReadTemperature(CELCIUS);
+        elTemp.timestamp = manager->GetRtc()->GetTimestampMS();
+        manager->dataStore->Push(elTemp);
+    }
 
-    CollectionElement elHumid;
-    elHumid.type = "humidity";
-    elHumid.value = sensor.ReadHumidity();
-    elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
-    manager->dataStore->Push(elHumid);
+    if (this->sensorManager->IsSensorEnabled("humidity")) {
+        CollectionElement elHumid;
+        elHumid.type = "humidity";
+        elHumid.value = sensor.ReadHumidity();
+        elHumid.timestamp = manager->GetRtc()->GetTimestampMS();
+        manager->dataStore->Push(elHumid);
+    }
 
     return true;
 }

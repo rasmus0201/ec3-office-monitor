@@ -17,53 +17,12 @@ DataManager::DataManager(ApiClient* apiClient, Rtc* rtc)
     this->dataStore = new Collection();
     this->rtc = rtc;
 
-    // this->Setup();
     this->thread.start(callback(this, &DataManager::Worker));
 }
 
 Rtc* DataManager::GetRtc()
 {
     return this->rtc;
-}
-
-void DataManager::Setup()
-{
-    // this->net = NetworkInterface::get_default_instance();
-
-    // // Connect to network if not connected
-    // if (this->net->get_connection_status() == NSAPI_STATUS_DISCONNECTED) {
-    //     nsapi_size_or_error_t result = this->net->connect();
-    //     if (result != 0) {
-    //         printf("Error! net->connect() returned: %d\n", result);
-    //         return;
-    //     }
-    // }
-
-    // // Set the TCP socket to use
-    // // across HTTP request to save memory
-    // this->socket = new TCPSocket();
-
-    // if (this->socket->open(this->net) != NSAPI_ERROR_OK) {
-    //     printf("TCPSocket not opened!\n");
-    //     return;
-    // }
-
-    // SocketAddress addr;
-    // ParsedUrl* parsed_url = new ParsedUrl(this->apiUrl.c_str());
-    // if (this->net->gethostbyname(parsed_url->host(), &addr) != NSAPI_ERROR_OK) {
-    //     printf("Could not get the ip of host!\n");
-    //     return;
-    // }
-
-    // // Connect to the website's IP with the port (http=80, https=443)
-    // addr.set_port(parsed_url->port());
-    // if (this->socket->connect(addr) != NSAPI_ERROR_OK) {
-    //     printf("TCPSocket could not connect to address!\n");
-    //     return;
-    // }
-
-    // // Cleanup
-    // delete parsed_url;
 }
 
 void DataManager::Worker()

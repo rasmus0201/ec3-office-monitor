@@ -16,6 +16,7 @@
 #include "mbed.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
+#include "SensorManager.h"
 
 using namespace Bundsgaard;
 
@@ -31,10 +32,11 @@ namespace Bundsgaard
             /**
              * @brief Construct a new Light Sensor object
              * 
+             * @param sensorManager
              * @param pin 
              * @param sleep 
              */
-            LightSensor(PinName pin, int sleep);
+            LightSensor(SensorManager* sensorManager, PinName pin, int sleep);
 
             /**
              * @brief Run the data collecting for Light sensor

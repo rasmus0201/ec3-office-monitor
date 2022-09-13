@@ -1,4 +1,6 @@
+#include <string>
 #include <vector>
+#include <map>
 #include "defs.h"
 #include "Collection.h"
 #include "SensorInterface.h"
@@ -10,6 +12,19 @@ using namespace Bundsgaard;
 SensorManager::SensorManager(DataManager* manager)
 {
     this->dataManager = manager;
+}
+
+void SensorManager::EnableSensor(string sensor)
+{
+    this->sensorsEnabled.insert({
+        sensor,
+        true
+    });
+}
+
+bool SensorManager::IsSensorEnabled(string sensor)
+{
+    return this->sensorsEnabled.find(sensor) != this->sensorsEnabled.end();
 }
 
 void SensorManager::AddSensor(SensorInterface* sensor)

@@ -15,6 +15,7 @@
 #include <string>
 #include "mbed.h"
 #include "DataManager.h"
+#include "SensorManager.h"
 
 namespace Bundsgaard
 {
@@ -62,6 +63,7 @@ namespace Bundsgaard
             virtual std::chrono::milliseconds GetSleepTimeout() = 0;
 
         protected:
+            SensorManager* sensorManager;
             std::string name;
             std::chrono::milliseconds sleepFor;
     };

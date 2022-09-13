@@ -118,13 +118,13 @@ void setup()
     SensorManager* manager = new SensorManager(dataManager);
 
     printf("Setting up sensors\n");
-    SoundSensor* soundSensor = new SoundSensor(A0, SOUND_SENSOR_DELAY);
+    SoundSensor* soundSensor = new SoundSensor(manager, A0, SOUND_SENSOR_DELAY);
     soundSensor->SetName(std::string("Sound"));
 
-    LightSensor* lightSensor = new LightSensor(A1, LIGHT_SENSOR_DELAY);
+    LightSensor* lightSensor = new LightSensor(manager, A1, LIGHT_SENSOR_DELAY);
     lightSensor->SetName(std::string("Light"));
 
-    DHTSensor* dhtSensor = new DHTSensor(D4, DHT_SENSOR_DELAY);
+    DHTSensor* dhtSensor = new DHTSensor(manager, D4, DHT_SENSOR_DELAY);
     dhtSensor->SetName(std::string("DHT"));
 
     manager->AddSensor(soundSensor);
@@ -161,6 +161,12 @@ void setup()
     location->SetLocationId(dataLocation["id"].as<int>());
     location->SetLocationName(std::string(dataLocation["name"].as<const char*>()));
     location->SetDeviceName(std::string(data["name"].as<const char*>()));
+
+    for (JsonObject dataSensor : data["sensors"].as<JsonArray>()) {
+        manager->EnableSensor(
+            dataSensor["name"].as<const char *>()
+        );
+    }
 
     printf("Running manager\n");
     manager->Run();

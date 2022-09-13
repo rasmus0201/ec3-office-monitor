@@ -25,24 +25,21 @@ ApiClient::ApiClient()
     // across HTTP request to save memory
     this->socket = new TCPSocket();
 
-    if (this->socket->open(this->net) != NSAPI_ERROR_OK)
-    {
+    if (this->socket->open(this->net) != NSAPI_ERROR_OK) {
         printf("TCPSocket not opened!\n");
         return;
     }
 
     SocketAddress addr;
     ParsedUrl *parsed_url = new ParsedUrl(API_BASE_URL);
-    if (this->net->gethostbyname(parsed_url->host(), &addr) != NSAPI_ERROR_OK)
-    {
+    if (this->net->gethostbyname(parsed_url->host(), &addr) != NSAPI_ERROR_OK) {
         printf("Could not get the ip of host!\n");
         return;
     }
 
     // Connect to the website's IP with the port (http=80, https=443)
     addr.set_port(parsed_url->port());
-    if (this->socket->connect(addr) != NSAPI_ERROR_OK)
-    {
+    if (this->socket->connect(addr) != NSAPI_ERROR_OK) {
         printf("TCPSocket could not connect to address!\n");
         return;
     }
@@ -73,7 +70,6 @@ HttpResponse* ApiClient::Get(std::string endpoint)
 
     HttpResponse* response = req->send();
 
-    // delete req;
     return response;
 }
 
@@ -96,7 +92,6 @@ HttpResponse* ApiClient::Post(std::string endpoint, std::string body)
 
     HttpResponse* response = req->send(contents, strlen(contents));
 
-    // delete req;
     delete[] contents;
 
     return response;

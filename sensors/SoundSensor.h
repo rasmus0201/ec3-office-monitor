@@ -16,6 +16,7 @@
 #include "mbed.h"
 #include "SensorInterface.h"
 #include "DataManager.h"
+#include "SensorManager.h"
 
 using namespace Bundsgaard;
 
@@ -31,10 +32,11 @@ namespace Bundsgaard
             /**
              * @brief Construct a new Sound Sensor object
              * 
+             * @param sensorManager
              * @param pin 
              * @param sleep 
              */
-            SoundSensor(PinName pin, int sleep);
+            SoundSensor(SensorManager* sensorManager, PinName pin, int sleep);
 
             /**
              * @brief Run the data collecting for sound sensor

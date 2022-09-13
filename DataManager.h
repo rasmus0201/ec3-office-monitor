@@ -38,12 +38,13 @@ namespace Bundsgaard
             DataManager(ApiClient* apiClient, Rtc* rtc);
 
             /**
-             * @brief Setup the manager. This will create a socket
-             *        to the API for reuse on each data-push
+             * @brief Get the Rtc object
              * 
+             * @return Rtc* 
              */
-            void Setup();
+            Rtc* GetRtc();
 
+        private:
             /**
              * @brief Push data online to the API
              * 
@@ -56,24 +57,15 @@ namespace Bundsgaard
              * 
              */
             void Worker();
-
-            /**
-             * @brief Get the Rtc object
-             * 
-             * @return Rtc* 
-             */
-            Rtc* GetRtc();
         
         public:
             Collection* dataStore;
 
         private:
+            Thread thread;
             ApiClient* apiClient;
             Rtc* rtc;
-            Thread thread;
             std::string apiUrl;
-            NetworkInterface* net;
-            TCPSocket* socket;
     };
 }
 

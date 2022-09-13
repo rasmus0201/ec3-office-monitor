@@ -1,21 +1,25 @@
 #include <string>
 #include "LightSensor.h"
 #include "CollectionElement.h"
+#include "SensorManager.h"
 
 using namespace Bundsgaard;
 
-LightSensor::LightSensor(PinName pin, int sleep) : sensor(pin)
+LightSensor::LightSensor(SensorManager* sensorManager, PinName pin, int sleep) : sensor(pin)
 {
+    this->sensorManager = sensorManager;
     this->sleepFor = std::chrono::milliseconds(sleep);
 }
 
 bool LightSensor::Run(DataManager* manager)
 {
-    CollectionElement el;
-    el.type = "light";
-    el.timestamp = manager->GetRtc()->GetTimestampMS();
-    el.value = (float)sensor.read_u16();
-    manager->dataStore->Push(el);
+    if (this->sensorManager->IsSensorEnabled("light")) {
+        CollectionElement el;
+        el.type = "light";
+        el.timestamp = manager->GetRtc()->GetTimestampMS();
+        el.value = (float)sensor.read_u16();
+        manager->dataStore->Push(el);
+    }
 
     return true;
 }

@@ -12,9 +12,10 @@
 #ifndef BUNDSGAARD_SENSOR_MANAGER_H
 #define BUNDSGAARD_SENSOR_MANAGER_H
 
+#include <string>
 #include <vector>
+#include <map>
 #include "Collection.h"
-#include "SensorInterface.h"
 #include "DataManager.h"
 
 namespace Bundsgaard
@@ -40,6 +41,20 @@ namespace Bundsgaard
             SensorManager(DataManager* manager);
 
             /**
+             * @brief Add sensor name -> ID mapping
+             *
+             * @param sensor
+             */
+            void EnableSensor(string sensor);
+
+            /**
+             * @brief Check if sensor is enabled.
+             *
+             * @param sensor
+             */
+            bool IsSensorEnabled(string sensor);
+
+            /**
              * @brief Start/run the thread
              * 
              */
@@ -61,9 +76,9 @@ namespace Bundsgaard
             /**
              * @brief Get the sensors
              * 
-             * @return std::vector<SensorInterface*>
+             * @return vector<SensorInterface*>
              */
-            std::vector<SensorInterface*> GetSensors();
+            vector<SensorInterface*> GetSensors();
 
             /**
              * @brief Get the underlying data collection
@@ -75,7 +90,8 @@ namespace Bundsgaard
         private:
             Thread thread;
             DataManager* dataManager;
-            std::vector<SensorInterface*> sensors;
+            vector<SensorInterface*> sensors;
+            map<string, bool> sensorsEnabled;
     };
 }
 
