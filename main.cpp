@@ -10,9 +10,9 @@
  */
 
 #include <string>
+#include "http_response.h"
 #include "mbed.h"
 #include "mbedtls_entropy_config.h"
-#include "mbed_mem_trace.h"
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
 #include "Rtc.h"
@@ -132,14 +132,14 @@ void setup()
     manager->AddSensor(dhtSensor);
 
     printf("Getting device data\n");
-    HttpResponse* res = apiClient->Get("/devices/" + std::to_string(DEVICE_ID));
+    ApiResponse res = apiClient->Get("/devices/" + std::to_string(DEVICE_ID));
 
-    if (!res || res->get_status_code() >= 300) {
+    if (!res.success || res.code >= 300) {
         printf("Didn't get a successful HTTP response");
         return;
     }
 
-    std::string jsonSource = res->get_body_as_string();
+    std::string jsonSource = res.body;
     DynamicJsonDocument doc(1024);
     DeserializationError error = deserializeJson(doc, (const char*) jsonSource.c_str());
 

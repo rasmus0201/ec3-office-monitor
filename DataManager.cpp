@@ -1,6 +1,7 @@
 #include <string>
-#include "http_response.h"
 #include "mbed.h"
+#include "mbed_mem_trace.h"
+#include "http_response.h"
 #include "http_request.h"
 #include "Rtc.h"
 #include "defs.h"
@@ -9,6 +10,12 @@
 #include "DataManager.h"
 
 using namespace Bundsgaard;
+
+void print_memory_info() {
+    mbed_stats_heap_t heap_stats;
+    mbed_stats_heap_get(&heap_stats);
+    printf("Heap size: %u / %u bytes\r\n", heap_stats.current_size, heap_stats.reserved_size);
+}
 
 DataManager::DataManager(ApiClient* apiClient, Rtc* rtc)
 {
@@ -46,23 +53,26 @@ void DataManager::PushToCloud()
     std::string json = "{\"data\":" + this->dataStore->ToJson() + "}";
 
     // Do an API request
-    HttpResponse* response = this->apiClient->Post(
+    ApiResponse apiResponse = this->apiClient->Post(
         ("/devices/" + std::to_string(DEVICE_ID) + "/measurements"),
         json
     );
 
     // Check for errors
-    if (!response) {
-        printf("HttpRequest failed\n");
+    if (!apiResponse.success || apiResponse.code >= 300) {
+        printf("HttpRequest failed with code: %d\n", apiResponse.error);
 
         // The request failed, so something really bad must have happened or is about to
         // To make the EC always run, we restart the program here.
         // There could be a better way of doing this, but this is the fastest solution atm.
-        NVIC_SystemReset();
+        return NVIC_SystemReset();
     }
 
     printf("Did push to cloud!\n");
 
-    // Clear the datastore
+    // Clean up
     this->dataStore->Clear();
+
+    print_memory_info();
+    printf("\n");
 }

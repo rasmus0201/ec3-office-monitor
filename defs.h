@@ -19,6 +19,7 @@
 #define SOUND_SENSOR_DELAY 500
 
 #define API_BASE_URL "http://10.130.67.71/api/v1"
+#define API_TOKEN "05Cknj50fawAOaUrDDmy2158X817BNmuDlDldQmbFHtpqJ05Iq3oitxmyrh8D82F"
 
 #define SENSOR_MANAGER_LOOP_SLEEP_TIME 5ms
 

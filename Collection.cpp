@@ -21,11 +21,11 @@ void Collection::Push(CollectionElement value)
 void Collection::Clear()
 {
     std::vector<std::string> keys = this->Keys();
-    this->c.clear();
-
     for (auto &k : keys) {
-        this->c[k] = {};
+        this->c[k].clear();
     }
+
+    this->c.clear();
 }
 
 int Collection::Size()

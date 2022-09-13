@@ -16,9 +16,18 @@
 #include <vector>
 #include <string>
 #include "http_request.h"
+#include "http_response.h"
+#include "nsapi_types.h"
 
 namespace Bundsgaard
 {
+    struct ApiResponse {
+        bool success;
+        nsapi_error_t error;
+        int code;
+        string body;
+    };
+
     /**
      * @brief An API client for HTTP comm.
      *
@@ -39,16 +48,18 @@ namespace Bundsgaard
             /**
              * @brief Create a new GET request and get response
              */
-            HttpResponse* Get(std::string endpoint);
+            ApiResponse Get(std::string endpoint);
 
             /**
              * @brief Create a new POST request and get response
              */
-            HttpResponse* Post(std::string endpoint, std::string body);
+            ApiResponse Post(std::string endpoint, std::string body);
 
         private:
             NetworkInterface *net;
             TCPSocket *socket;
+
+            HttpRequest* req;
     };
 }
 

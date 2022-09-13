@@ -10,6 +10,7 @@ using namespace Bundsgaard;
 
 ApiClient::ApiClient()
 {
+    this->req = NULL;
     this->net = NetworkInterface::get_default_instance();
 
     // Connect to network if not connected
@@ -52,47 +53,69 @@ ApiClient::~ApiClient()
 {
     delete this->net;
     delete this->socket;
+
+    if (this->req) {
+        delete this->req;
+    }
 }
 
-HttpResponse* ApiClient::Get(std::string endpoint)
+ApiResponse ApiClient::Get(std::string endpoint)
 {
-    string requestUrl = string(API_BASE_URL);
-    requestUrl.append(endpoint);
+    if (this->req != NULL) {
+        delete this->req;
+    }
 
-    HttpRequest *req = new HttpRequest(
+    HttpRequest* req = new HttpRequest(
         this->net,
         this->socket,
         HTTP_GET,
-        requestUrl.c_str()
+        (API_BASE_URL + endpoint).c_str()
     );
 
     req->set_header("Content-Type", "application/json");
+    req->set_header("Authorization", API_TOKEN);
 
     HttpResponse* response = req->send();
 
-    return response;
+    struct ApiResponse ret = {
+        .success = req->get_error() == NSAPI_ERROR_OK,
+        .error = req->get_error(),
+        .code = response->get_status_code(),
+        .body = response->get_body_as_string().c_str(),
+    };
+
+    return ret;
 }
 
-HttpResponse* ApiClient::Post(std::string endpoint, std::string body)
+ApiResponse ApiClient::Post(std::string endpoint, std::string body)
 {
-    string requestUrl = string(API_BASE_URL);
-    requestUrl.append(endpoint);
+    if (this->req != NULL) {
+        delete this->req;
+    }
 
-    HttpRequest *req = new HttpRequest(
+    HttpRequest* req = new HttpRequest(
         this->net,
         this->socket,
         HTTP_POST,
-        requestUrl.c_str()
+        (API_BASE_URL + endpoint).c_str()
     );
 
     req->set_header("Content-Type", "application/json");
+    req->set_header("Authorization", API_TOKEN);
 
     char* contents = new char[body.size() + 1];
     strcpy(contents, body.c_str());
 
     HttpResponse* response = req->send(contents, strlen(contents));
 
+    struct ApiResponse ret = {
+        .success = req->get_error() == NSAPI_ERROR_OK,
+        .error = req->get_error(),
+        .code = response->get_status_code(),
+        .body = response->get_body_as_string(),
+    };
+
     delete[] contents;
 
-    return response;
+    return ret;
 }
