@@ -81,6 +81,7 @@ Der er flere forskellige "områder" programmet gør sig i:
 ### TLS
 For at sikre data og sikker kommunikation mellem serveren og klienten bør der opsættes et SSL/TLS-certifikat på serveren som sikre API'et (hjemmesiden) - altså "HTTP over TLS" også kaldet HTTPS. Dette vil sikre at andre ikke kan hverken se eller ændre på data som sendes mellem klient og server (Man-In-The-Middle Attack er _ikke_ muligt)
 
+### Authentication
 Yderligere sikkerhed vil være at sikre API'et mod klienter som ikke har adgang. Hvis ikke der laves en form for authentication system, vil det være muligt for enhver i verden at kalde alle endpoints i API'et og dermed ændre på data i databasen, eller læse alle data. Dette kan sikres via fx. Tokens. Jeg har valgt at implementere det som en hardcoded token på enheden som giver adgang til alle endpoints. Dette er ikke det mest sikre, token ikke udløber, hvilket et god practice at lave en ny token - fx. hver uge. Dette kræver dog en del mere arbejde og tid som jeg ikke lige har.
 
 ## 6. Notifikationer (WIP)
@@ -105,7 +106,7 @@ Først havde jeg en del tråde - jeg havde en tråd for hvert `DataManager` obje
 - Display'et kan ikke helt finde ud af at Clear linjen rigtigt hvis den forrige string er større længde en den nye (**løst (padded strings)**)
 - Problemer med at parse JSON response fra API'et. Det skal gerne være et lille library, men de fleste jeg fandt til Mbed virkede ikke korrekt. Endte med at finde et lille library som virkede, men originalt er tiltænkt Arduino. Det virker dog fint med STM boardet. (**løst**)
 
-## 8. Fremtidige ændringer
+## 9. Fremtidige ændringer
 
 - Tjekke om der er memory leaks - heg vil gerne lave det så programmet kan køre "uendeligt", så det ikke crasher - eller hvis det gør at den kan genstarte selv. Kan også være trådene skal have defineret deres memory (**Har kørt en dag uden stop, så dette er muligvis blevet fikset**)
 - Lave notifikations-systemet
