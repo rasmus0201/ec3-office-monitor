@@ -60,7 +60,7 @@ void DataManager::PushToCloud()
 
     // Check for errors
     if (!apiResponse.success || apiResponse.code >= 300) {
-        printf("HttpRequest failed with code: %d\n", apiResponse.error);
+        printf("HttpRequest failed with code: %d, http status: %d\n", apiResponse.error, apiResponse.code);
 
         // The request failed, so something really bad must have happened or is about to
         // To make the EC always run, we restart the program here.
