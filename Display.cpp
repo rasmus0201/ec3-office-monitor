@@ -107,8 +107,8 @@ void Display::ShowLocation()
 {
     this->Clear();
     this->FontBig();
-    this->TextCentered("Bygning: " + this->location->GetBuilding());
-    this->TextCentered("Lokale: " + this->location->GetRoom(), LINE(2));
+    this->TextCentered("Enhed: " + this->location->GetDeviceName());
+    this->TextCentered("Lokale: " + this->location->GetLocationName() + " (#" + std::to_string(this->location->GetLocationId()) + ")" , LINE(2));
 }
 
 void Display::ShowData()
@@ -118,7 +118,11 @@ void Display::ShowData()
     }
 
     this->FontMedium();
-    this->TextSpaceBetween("Location:", this->location->GetBuilding() + "-" + this->location->GetRoom(), LINE(0));
+    this->TextSpaceBetween(
+        "Location:",
+        this->location->GetLocationName() + " #" + std::to_string(this->location->GetLocationId()),
+        LINE(0)
+    );
     
     time_t currentTime = time(NULL);
     struct tm* localeTime;

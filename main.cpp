@@ -16,7 +16,9 @@
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
 #include "Rtc.h"
+#include "packages/ArduinoJson.h"
 #include "defs.h"
+#include "ApiClient.h"
 #include "Display.h"
 #include "Collection.h"
 #include "Location.h"
@@ -106,8 +108,11 @@ void setup()
     display.Clear();
     display.TextCentered("Initializing sensors...");
 
+    printf("Setting up api client\n");
+    ApiClient* apiClient = new ApiClient();
+
     printf("Setting up data manager\n");
-    DataManager* dataManager = new DataManager(rtc);
+    DataManager* dataManager = new DataManager(apiClient, rtc);
 
     printf("Setting up sensor manager\n");
     SensorManager* manager = new SensorManager(dataManager);
@@ -126,15 +131,41 @@ void setup()
     manager->AddSensor(lightSensor);
     manager->AddSensor(dhtSensor);
 
+    printf("Getting device data\n");
+    HttpResponse* res = apiClient->Get("/devices/" + std::to_string(DEVICE_ID));
+
+    if (!res || res->get_status_code() >= 300) {
+        printf("Didn't get a successful HTTP response");
+        return;
+    }
+
+    std::string jsonSource = res->get_body_as_string();
+    DynamicJsonDocument doc(1024);
+    DeserializationError error = deserializeJson(doc, (const char*) jsonSource.c_str());
+
+    if (error) {
+        printf("deserializeJson() failed: %s\n", error.c_str());
+        return;
+    }
+
+    if (!doc["success"].as<bool>()) {
+        printf("Didn't get a successful HTTP response");
+        return;
+    }
+
+    JsonObject data = doc["data"];
+    JsonObject dataLocation = data["location"];
+
     printf("Setting location\n");
-    Location* location = new Location(DEVICE_ID);
-    location->SetBuilding("MU8");
-    location->SetRoom("R22");
-    button.rise(callback(&display, &Display::ScreenChangerCallback));
+    Location* location = new Location();
+    location->SetLocationId(dataLocation["id"].as<int>());
+    location->SetLocationName(std::string(dataLocation["name"].as<const char*>()));
+    location->SetDeviceName(std::string(data["name"].as<const char*>()));
 
     printf("Running manager\n");
     manager->Run();
     
     display.SetManager(manager);
     display.SetLocation(location);
+    button.rise(callback(&display, &Display::ScreenChangerCallback));
 }

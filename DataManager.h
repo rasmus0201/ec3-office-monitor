@@ -15,6 +15,7 @@
 #include <string>
 #include "mbed.h"
 #include "Rtc.h"
+#include "ApiClient.h"
 #include "Collection.h"
 
 namespace Bundsgaard
@@ -31,9 +32,10 @@ namespace Bundsgaard
             /**
              * @brief Construct a new Data Manager object
              * 
+             * @param apiClient
              * @param rtc 
              */
-            DataManager(Rtc* rtc);
+            DataManager(ApiClient* apiClient, Rtc* rtc);
 
             /**
              * @brief Setup the manager. This will create a socket
@@ -66,6 +68,7 @@ namespace Bundsgaard
             Collection* dataStore;
 
         private:
+            ApiClient* apiClient;
             Rtc* rtc;
             Thread thread;
             std::string apiUrl;

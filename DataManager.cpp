@@ -1,20 +1,23 @@
 #include <string>
+#include "http_response.h"
 #include "mbed.h"
 #include "http_request.h"
 #include "Rtc.h"
 #include "defs.h"
+#include "ApiClient.h"
 #include "Collection.h"
 #include "DataManager.h"
 
 using namespace Bundsgaard;
 
-DataManager::DataManager(Rtc* rtc)
+DataManager::DataManager(ApiClient* apiClient, Rtc* rtc)
 {
+    this->apiClient = apiClient;
     this->apiUrl = API_BASE_URL;
     this->dataStore = new Collection();
     this->rtc = rtc;
 
-    this->Setup();
+    // this->Setup();
     this->thread.start(callback(this, &DataManager::Worker));
 }
 
@@ -25,42 +28,42 @@ Rtc* DataManager::GetRtc()
 
 void DataManager::Setup()
 {
-    this->net = NetworkInterface::get_default_instance();
+    // this->net = NetworkInterface::get_default_instance();
 
-    // Connect to network if not connected
-    if (this->net->get_connection_status() == NSAPI_STATUS_DISCONNECTED) {
-        nsapi_size_or_error_t result = this->net->connect();
-        if (result != 0) {
-            printf("Error! net->connect() returned: %d\n", result);
-            return;
-        }
-    }
+    // // Connect to network if not connected
+    // if (this->net->get_connection_status() == NSAPI_STATUS_DISCONNECTED) {
+    //     nsapi_size_or_error_t result = this->net->connect();
+    //     if (result != 0) {
+    //         printf("Error! net->connect() returned: %d\n", result);
+    //         return;
+    //     }
+    // }
 
-    // Set the TCP socket to use
-    // across HTTP request to save memory
-    this->socket = new TCPSocket();
+    // // Set the TCP socket to use
+    // // across HTTP request to save memory
+    // this->socket = new TCPSocket();
 
-    if (this->socket->open(this->net) != NSAPI_ERROR_OK) {
-        printf("TCPSocket not opened!\n");
-        return;
-    }
+    // if (this->socket->open(this->net) != NSAPI_ERROR_OK) {
+    //     printf("TCPSocket not opened!\n");
+    //     return;
+    // }
 
-    SocketAddress addr;
-    ParsedUrl* parsed_url = new ParsedUrl(this->apiUrl.c_str());
-    if (this->net->gethostbyname(parsed_url->host(), &addr) != NSAPI_ERROR_OK) {
-        printf("Could not get the ip of host!\n");
-        return;
-    }
+    // SocketAddress addr;
+    // ParsedUrl* parsed_url = new ParsedUrl(this->apiUrl.c_str());
+    // if (this->net->gethostbyname(parsed_url->host(), &addr) != NSAPI_ERROR_OK) {
+    //     printf("Could not get the ip of host!\n");
+    //     return;
+    // }
 
-    // Connect to the website's IP with the port (http=80, https=443)
-    addr.set_port(parsed_url->port());
-    if (this->socket->connect(addr) != NSAPI_ERROR_OK) {
-        printf("TCPSocket could not connect to address!\n");
-        return;
-    }
+    // // Connect to the website's IP with the port (http=80, https=443)
+    // addr.set_port(parsed_url->port());
+    // if (this->socket->connect(addr) != NSAPI_ERROR_OK) {
+    //     printf("TCPSocket could not connect to address!\n");
+    //     return;
+    // }
 
-    // Cleanup
-    delete parsed_url;
+    // // Cleanup
+    // delete parsed_url;
 }
 
 void DataManager::Worker()
@@ -82,36 +85,26 @@ void DataManager::PushToCloud()
     printf("Pushing to cloud!\n");
 
     // Construct the request body as JSON formatted string
-    std::string json = "{\"data\":";
-    json += this->dataStore->ToJson();
-    json += "}";
-    char* body = new char[json.size() + 1];
-	strcpy(body, json.c_str());
+    std::string json = "{\"data\":" + this->dataStore->ToJson() + "}";
 
     // Do an API request
-    {
-        HttpRequest* post_req = new HttpRequest(
-            this->net,
-            this->socket,
-            HTTP_POST,
-            (this->apiUrl + "/devices/" + std::to_string(DEVICE_ID) + "/measurements").c_str()
-        );
-        post_req->set_header("Content-Type", "application/json");
-        
-        if (post_req->send(body, strlen(body))) {
-            printf("Did push to cloud!\n");
-        } else {
-            nsapi_error_t err = post_req->get_error();
-            printf("HttpRequest failed (error code %d)\n", err);
+    HttpResponse* response = this->apiClient->Post(
+        (this->apiUrl + "/devices/" + std::to_string(DEVICE_ID) + "/measurements"),
+        json
+    );
 
-            // The request failed, so something really bad must have happened or is about to
-            // To make the EC always run, we restart the program here.
-            // There could be a better way of doing this, but this is the fastest solution atm. 
-            NVIC_SystemReset();
-        }
+    // Check for errors
+    if (!response) {
+        printf("HttpRequest failed\n");
+
+        // The request failed, so something really bad must have happened or is about to
+        // To make the EC always run, we restart the program here.
+        // There could be a better way of doing this, but this is the fastest solution atm. 
+        NVIC_SystemReset();
     }
+
+    printf("Did push to cloud!\n");
 
     // Clear the datastore 
     this->dataStore->Clear();
-    delete[] body;
 }
