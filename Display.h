@@ -4,9 +4,9 @@
  * @brief Display header file
  * @version 0.1
  * @date 2020-08-20
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #ifndef BUNDSGAARD_DISPLAY_H
@@ -22,8 +22,8 @@
 namespace Bundsgaard
 {
     /**
-     * @brief Enum to tell screen states apart 
-     * 
+     * @brief Enum to tell screen states apart
+     *
      */
     enum DisplayScreen {
         NO_STATE = -1,
@@ -31,11 +31,11 @@ namespace Bundsgaard
         LOCATION,
         DATA
     };
-    
+
     /**
      * @brief Display class with different helper functions
      *        and functions for displaying different screen states
-     * 
+     *
      */
     class Display
     {
@@ -48,14 +48,14 @@ namespace Bundsgaard
 
             /**
              * @brief Set the sensor manager object
-             * 
+             *
              * @param manager
              */
             void SetManager(SensorManager* manager);
-            
+
             /**
              * @brief Set the location object
-             * 
+             *
              * @param location
              */
             void SetLocation(Location* location);
@@ -105,7 +105,7 @@ namespace Bundsgaard
             /**
              * @brief Delay the screen (HAL_Delay)
              *
-             * @param delay 
+             * @param delay
              */
             void Delay(uint32_t delay);
 
@@ -113,24 +113,24 @@ namespace Bundsgaard
              * @brief Display vertially and horizontally centered string.
              *        The y-position can be at an offset up or down.
              *
-             * @param text 
-             * @param yOffset 
+             * @param text
+             * @param yOffset
              */
             void TextCentered(std::string text, uint16_t yOffset = 0);
 
             /**
              * @brief Display left-aligned text
              *
-             * @param text 
-             * @param yOffset 
+             * @param text
+             * @param yOffset
              */
             void TextLeft(std::string text, uint16_t yOffset = 0);
 
             /**
              * @brief Display right-aligned text
              *
-             * @param text 
-             * @param yOffset 
+             * @param text
+             * @param yOffset
              */
             void TextRight(std::string text, uint16_t yOffset = 0);
 
@@ -139,7 +139,7 @@ namespace Bundsgaard
              *
              * @param textLeft
              * @param textRight
-             * @param yOffset 
+             * @param yOffset
              */
             void TextSpaceBetween(std::string textLeft, std::string textRight, uint16_t yOffset = 0);
 
@@ -182,7 +182,7 @@ namespace Bundsgaard
         public:
             enum DisplayScreen currentState = HOME;
             enum DisplayScreen prevState = NO_STATE;
-        
+
         private:
             uint32_t background;
             uint32_t color;

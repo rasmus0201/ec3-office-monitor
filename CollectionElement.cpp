@@ -8,9 +8,9 @@ std::string CollectionElement::ToJson()
     std::string json;
 
     json += "{";
-    json += "\"timestamp\":" + std::to_string(this->timestamp) + ",";
-    json += "\"type\":\"" + this->type + "\",";
-    json += "\"value\":" + std::to_string(this->value);
+    json += "\"ts\":" + std::to_string(this->timestamp) + ",";
+    json += "\"t\":\"" + this->type + "\",";
+    json += "\"v\":" + std::to_string(this->value);
     json += "}";
 
     return json;

@@ -1,21 +1,25 @@
 #include <string>
 #include "SoundSensor.h"
 #include "CollectionElement.h"
+#include "SensorManager.h"
 
 using namespace Bundsgaard;
 
-SoundSensor::SoundSensor(PinName pin, int sleep) : sensor(pin)
+SoundSensor::SoundSensor(SensorManager* sensorManager, PinName pin, int sleep) : sensor(pin)
 {
+    this->sensorManager = sensorManager;
     this->sleepFor = std::chrono::milliseconds(sleep);
 }
 
 bool SoundSensor::Run(DataManager* manager)
 {
-    CollectionElement el;
-    el.type = "sound";
-    el.timestamp = manager->GetRtc()->GetTimestampMS();
-    el.value = (float)sensor.read_u16();
-    manager->dataStore->Push(el);
+    if (this->sensorManager->IsSensorEnabled("sound")) {
+        CollectionElement el;
+        el.type = "sound";
+        el.timestamp = manager->GetRtc()->GetTimestampMS();
+        el.value = (float)sensor.read_u16();
+        manager->dataStore->Push(el);
+    }
 
     return true;
 }

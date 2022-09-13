@@ -4,9 +4,9 @@
  * @brief Location header file
  * @version 0.1
  * @date 2020-08-20
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #ifndef BUNDSGAARD_LOCATION_H
@@ -18,57 +18,51 @@ namespace Bundsgaard
 {
     /**
      * @brief Set the physical location of the device
-     * 
+     *
      */
     class Location
     {
         public:
             /**
-             * @brief Construct a new Location object
-             * 
-             * @param deviceId 
+             * @brief Set the location ID
+             *
+             * @param id
              */
-            Location(int deviceId);
+            void SetLocationId(uint32_t id);
 
             /**
-             * @brief Set the building name
-             * 
-             * @param str 
+             * @brief Get the location ID
              */
-            void SetBuilding(std::string str);
+            uint32_t GetLocationId();
 
             /**
-             * @brief Get the building name
-             * 
-             * @return std::string 
+             * @brief Set the location name
+             *
+             * @param str
              */
-            std::string GetBuilding();
+            void SetLocationName(std::string str);
 
             /**
-             * @brief Set the room name
-             * 
-             * @param str 
+             * @brief Get the location name
              */
-            void SetRoom(std::string str);
+            std::string GetLocationName();
 
             /**
-             * @brief Get the room name
-             * 
-             * @return std::string 
+             * @brief Set the device name
+             *
+             * @param str
              */
-            std::string GetRoom();
+            void SetDeviceName(std::string str);
 
             /**
-             * @brief Get the location as a JSON formatted string
-             * 
-             * @return std::string 
+             * @brief Get the device name
              */
-            std::string ToJson();
-        
+            std::string GetDeviceName();
+
         private:
-            int deviceId;
-            std::string building;
-            std::string room;
+            uint32_t locationId;
+            std::string locationName;
+            std::string deviceName;
     };
 }
 
