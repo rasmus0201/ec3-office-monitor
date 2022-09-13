@@ -123,11 +123,11 @@ void Display::ShowData()
         this->location->GetLocationName() + " #" + std::to_string(this->location->GetLocationId()),
         LINE(0)
     );
-    
+
     time_t currentTime = time(NULL);
     struct tm* localeTime;
     localeTime = localtime(&currentTime);
-    
+
     {
         std::string dateTime = to_weekdayname(localeTime->tm_wday) + ". ";
         dateTime += std::to_string(localeTime->tm_mday) + ". ";
@@ -140,10 +140,10 @@ void Display::ShowData()
         std::string strTime = pad_left(std::to_string(localeTime->tm_hour), 2) + ":";
         strTime += pad_left(std::to_string(localeTime->tm_min), 2, '0') + ":";
         strTime += pad_left(std::to_string(localeTime->tm_sec), 2, '0');
-        
+
         this->TextSpaceBetween("Time:", strTime, LINE(2));
     }
-    
+
 
     Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = collection->Keys();
@@ -156,13 +156,13 @@ void Display::ShowData()
         std::string name = element;
         name[0] = std::toupper(name[0]);
         std::string averagePrecision = std::to_string(avg).substr(0, std::to_string(avg).find(".") + precisionVal + 1);
-       
+
         this->TextSpaceBetween(
             name + ":",
             pad_left(averagePrecision, paddedLength),
             LINE(lineNo)
         );
-        
+
         lineNo++;
     }
 }
@@ -234,7 +234,7 @@ void Display::TextSpaceBetween(std::string textLeft, std::string textRight, uint
 void Display::ScreenChangerCallback()
 {
     // Algorithm:
-    // By using modulus the screen state will circulate states like: 
+    // By using modulus the screen state will circulate states like:
     // -1 -> 0
     // 0 -> 1
     // 1 -> 2

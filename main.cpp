@@ -4,9 +4,9 @@
  * @brief Main file
  * @version 0.1
  * @date 2020-08-20
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #include <string>
@@ -44,14 +44,14 @@ Display display;
 
 /**
  * @brief Setup everything
- * 
+ *
  */
 void setup();
 
 /**
  * @brief Main program
- * 
- * @return int 
+ *
+ * @return int
  */
 int main()
 {
@@ -170,7 +170,7 @@ void setup()
 
     printf("Running manager\n");
     manager->Run();
-    
+
     display.SetManager(manager);
     display.SetLocation(location);
     button.rise(callback(&display, &Display::ScreenChangerCallback));

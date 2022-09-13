@@ -4,9 +4,9 @@
  * @brief Location header file
  * @version 0.1
  * @date 2020-08-20
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #ifndef BUNDSGAARD_LOCATION_H
@@ -18,15 +18,15 @@ namespace Bundsgaard
 {
     /**
      * @brief Set the physical location of the device
-     * 
+     *
      */
     class Location
     {
         public:
             /**
              * @brief Set the location ID
-             * 
-             * @param id 
+             *
+             * @param id
              */
             void SetLocationId(uint32_t id);
 
@@ -37,8 +37,8 @@ namespace Bundsgaard
 
             /**
              * @brief Set the location name
-             * 
-             * @param str 
+             *
+             * @param str
              */
             void SetLocationName(std::string str);
 
@@ -49,8 +49,8 @@ namespace Bundsgaard
 
             /**
              * @brief Set the device name
-             * 
-             * @param str 
+             *
+             * @param str
              */
             void SetDeviceName(std::string str);
 
@@ -58,7 +58,7 @@ namespace Bundsgaard
              * @brief Get the device name
              */
             std::string GetDeviceName();
-        
+
         private:
             uint32_t locationId;
             std::string locationName;

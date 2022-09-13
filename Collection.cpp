@@ -9,7 +9,7 @@ using namespace Bundsgaard;
 void Collection::Push(CollectionElement value)
 {
     this->c[value.type].push_back(value);
-    
+
     if (this->c.at(value.type).size() >= this->maxSubelements) {
         this->c.at(value.type).erase(
             this->c.at(value.type).begin(),
@@ -22,7 +22,7 @@ void Collection::Clear()
 {
     std::vector<std::string> keys = this->Keys();
     this->c.clear();
-    
+
     for (auto &k : keys) {
         this->c[k] = {};
     }
@@ -31,11 +31,11 @@ void Collection::Clear()
 int Collection::Size()
 {
     int size = 0;
-    
+
     for (auto &v : this->c) {
         size += v.second.size();
     }
-    
+
     return size;
 }
 
@@ -60,7 +60,7 @@ float Collection::Average(std::string key)
 
     float avg = 0;
     int size = this->c.at(key).size();
-    
+
     if (size == 0) {
         return 0;
     }
@@ -83,7 +83,7 @@ std::string Collection::ToJson()
             json += ",";
         }
     }
-    
+
     json.pop_back();
     json += "]";
 

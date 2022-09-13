@@ -4,9 +4,9 @@
  * @brief Program definitions header file
  * @version 0.1
  * @date 2020-08-20
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #ifndef BUNDSGAARD_DEFS_H

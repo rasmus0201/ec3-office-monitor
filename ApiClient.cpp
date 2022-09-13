@@ -56,7 +56,7 @@ ApiClient::~ApiClient()
 
 HttpResponse* ApiClient::Get(std::string endpoint)
 {
-    string requestUrl = API_BASE_URL;
+    string requestUrl = string(API_BASE_URL);
     requestUrl.append(endpoint);
 
     HttpRequest *req = new HttpRequest(
@@ -77,7 +77,7 @@ HttpResponse* ApiClient::Post(std::string endpoint, std::string body)
 {
     string requestUrl = string(API_BASE_URL);
     requestUrl.append(endpoint);
-   
+
     HttpRequest *req = new HttpRequest(
         this->net,
         this->socket,
@@ -86,7 +86,7 @@ HttpResponse* ApiClient::Post(std::string endpoint, std::string body)
     );
 
     req->set_header("Content-Type", "application/json");
-    
+
     char* contents = new char[body.size() + 1];
     strcpy(contents, body.c_str());
 
