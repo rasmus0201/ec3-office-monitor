@@ -74,6 +74,21 @@ std::vector<SensorInterface*> SensorManager::GetSensors()
     return this->sensors;
 }
 
+std::vector<std::string> SensorManager::GetSensorKeys()
+{
+    vector<std::string> keys;
+
+    for (auto &sensor : this->sensors) {
+        for (auto &type : sensor->GetSensorTypes()) {
+            keys.push_back(type);
+        }
+    }
+
+    std::sort(keys.begin(), keys.end());
+
+    return keys;
+}
+
 Collection* SensorManager::GetDataCollection()
 {
     return this->dataManager->dataStore;

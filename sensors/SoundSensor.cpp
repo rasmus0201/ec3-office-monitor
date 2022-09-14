@@ -38,3 +38,8 @@ std::chrono::milliseconds SoundSensor::GetSleepTimeout()
 {
     return this->sleepFor;
 }
+
+std::vector<std::string> SoundSensor::GetSensorTypes()
+{
+    return {"sound"};
+}

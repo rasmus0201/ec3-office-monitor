@@ -22,7 +22,7 @@ For this you will need the following software/hardware:
    - mbed-os (version 6.16.0 - commit `54e8693ef4ff7e025018094f290a1d5cf380941f`) (import from `https://github.com/ARMmbed/mbed-os.git`)
    - BSP_DISCO_F746NG (version commit `85dbcff443aa20e932494823e42c6d2a9550d17a`) (import from `https://os.mbed.com/teams/ST/code/BSP_DISCO_F746NG/`)
    - mbed-dht (version commit `db94a44739cda011675bf3756cc35980f9c4d3be`) (import from `https://github.com/rasmus0201/mbed-dht.git`)
-   - mbed-http-client (version commit `72a23a5fb311d2c8c12eea9e12a075a0a0e7220c`) (import from `https://github.com/rasmus0201/mbed-http-client.git`)
+   - mbed-http-client (version commit `093a7c0c4cd36ddccbeb04b891830deb9f0645d8`) (import from `https://github.com/rasmus0201/mbed-http-client.git`)
    - mbed-rtc (version commit `efdb021294f264d95d7c8b071119c55e05938cc6`) (import from `https://github.com/rasmus0201/mbed-rtc.git`) this will also download `ntp-client` which is working on version `e919cfb14e2029efafc0d1288a0223cbd09811f0`
 3. If running own server, change API_BASE_URL in `defs.h`.
 4. Compile the code on your favorite platform

@@ -58,8 +58,6 @@ namespace Bundsgaard
         private:
             NetworkInterface *net;
             TCPSocket *socket;
-
-            HttpRequest* req;
     };
 }
 

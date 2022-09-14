@@ -56,6 +56,13 @@ namespace Bundsgaard
             virtual std::string GetName() = 0;
 
             /**
+             * @brief Get the sensor types this sensor is measuring.
+             *
+             * @return std::vector<std::string>
+             */
+            virtual std::vector<std::string> GetSensorTypes() = 0;
+
+            /**
              * @brief Get the sleep timeout
              *
              * @return std::chrono::milliseconds

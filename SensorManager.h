@@ -87,6 +87,13 @@ namespace Bundsgaard
              */
             Collection* GetDataCollection();
 
+            /**
+             * @brief Get the sensors (names) registered to this manager
+             *
+             * @return vector<string>
+             */
+            vector<string> GetSensorKeys();
+
         private:
             Thread thread;
             DataManager* dataManager;

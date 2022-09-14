@@ -10,7 +10,6 @@ using namespace Bundsgaard;
 
 ApiClient::ApiClient()
 {
-    this->req = NULL;
     this->net = NetworkInterface::get_default_instance();
 
     // Connect to network if not connected
@@ -53,33 +52,26 @@ ApiClient::~ApiClient()
 {
     delete this->net;
     delete this->socket;
-
-    if (this->req) {
-        delete this->req;
-    }
 }
 
 ApiResponse ApiClient::Get(std::string endpoint)
 {
-    if (this->req != NULL) {
-        delete this->req;
-    }
-
-    HttpRequest* req = new HttpRequest(
+    HttpRequest request(
         this->net,
         this->socket,
         HTTP_GET,
         (API_BASE_URL + endpoint).c_str()
     );
 
-    req->set_header("Content-Type", "application/json");
-    req->set_header("Authorization", API_TOKEN);
+    request.set_header("Content-Type", "application/json");
+    request.set_header("Authorization", API_TOKEN);
 
-    HttpResponse* response = req->send();
+    // Cleaned by request destructor
+    HttpResponse* response = request.send();
 
     struct ApiResponse ret = {
-        .success = req->get_error() == NSAPI_ERROR_OK,
-        .error = req->get_error(),
+        .success = request.get_error() == NSAPI_ERROR_OK,
+        .error = request.get_error(),
         .code = response->get_status_code(),
         .body = response->get_body_as_string().c_str(),
     };
@@ -89,28 +81,25 @@ ApiResponse ApiClient::Get(std::string endpoint)
 
 ApiResponse ApiClient::Post(std::string endpoint, std::string body)
 {
-    if (this->req != NULL) {
-        delete this->req;
-    }
-
-    HttpRequest* req = new HttpRequest(
+    HttpRequest request(
         this->net,
         this->socket,
         HTTP_POST,
         (API_BASE_URL + endpoint).c_str()
     );
 
-    req->set_header("Content-Type", "application/json");
-    req->set_header("Authorization", API_TOKEN);
+    request.set_header("Content-Type", "application/json");
+    request.set_header("Authorization", API_TOKEN);
 
     char* contents = new char[body.size() + 1];
     strcpy(contents, body.c_str());
 
-    HttpResponse* response = req->send(contents, strlen(contents));
+    // Cleaned by request destructor
+    HttpResponse* response = request.send(contents, strlen(contents));
 
     struct ApiResponse ret = {
-        .success = req->get_error() == NSAPI_ERROR_OK,
-        .error = req->get_error(),
+        .success = request.get_error() == NSAPI_ERROR_OK,
+        .error = request.get_error(),
         .code = response->get_status_code(),
         .body = response->get_body_as_string(),
     };

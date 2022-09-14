@@ -36,7 +36,7 @@ void Display::Setup()
     BSP_LCD_Init();
     BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, LCD_FB_START_ADDRESS);
     BSP_LCD_SelectLayer(LTDC_ACTIVE_LAYER);
-    HAL_Delay(1000);
+    HAL_Delay(500);
 
     uint8_t status = BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
     if (status != TS_OK) {
@@ -46,7 +46,7 @@ void Display::Setup()
         BSP_LCD_DisplayStringAt(0, LINE(5), (uint8_t *)"TOUCHSCREEN INIT FAIL", CENTER_MODE);
     }
 
-    HAL_Delay(1000);
+    HAL_Delay(500);
 }
 
 void Display::Loop()
@@ -146,20 +146,20 @@ void Display::ShowData()
 
 
     Collection* collection = manager->GetDataCollection();
-    vector<std::string> keys = collection->Keys();
+    vector<std::string> keys = manager->GetSensorKeys();
 
-    uint8_t paddedLength = 10;
+    uint8_t SCREEN_WIDTH_CHARS = 34;
     uint8_t precisionVal = 2;
     uint8_t lineNo = 3;
-    for (auto &element : keys) {
-        float avg = collection->Average(element);
-        std::string name = element;
+    for (auto &sensor : keys) {
+        float avg = collection->Average(sensor);
+        std::string name = sensor;
         name[0] = std::toupper(name[0]);
         std::string averagePrecision = std::to_string(avg).substr(0, std::to_string(avg).find(".") + precisionVal + 1);
 
         this->TextSpaceBetween(
-            name + ":",
-            pad_left(averagePrecision, paddedLength),
+            pad_right(name + ":", SCREEN_WIDTH_CHARS / 2),
+            pad_left(averagePrecision, SCREEN_WIDTH_CHARS / 2),
             LINE(lineNo)
         );
 

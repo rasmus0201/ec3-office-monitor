@@ -11,11 +11,11 @@
 
 using namespace Bundsgaard;
 
-void print_memory_info() {
-    mbed_stats_heap_t heap_stats;
-    mbed_stats_heap_get(&heap_stats);
-    printf("Heap size: %u / %u bytes\r\n", heap_stats.current_size, heap_stats.reserved_size);
-}
+// void print_memory_info() {
+//     mbed_stats_heap_t heap_stats;
+//     mbed_stats_heap_get(&heap_stats);
+//     printf("Heap size: %u / %u bytes\r\n", heap_stats.current_size, heap_stats.reserved_size);
+// }
 
 DataManager::DataManager(ApiClient* apiClient, Rtc* rtc)
 {
@@ -72,7 +72,4 @@ void DataManager::PushToCloud()
 
     // Clean up
     this->dataStore->Clear();
-
-    print_memory_info();
-    printf("\n");
 }

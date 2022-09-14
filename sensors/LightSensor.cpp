@@ -36,3 +36,8 @@ std::chrono::milliseconds LightSensor::GetSleepTimeout()
 {
     return this->sleepFor;
 }
+
+std::vector<std::string> LightSensor::GetSensorTypes()
+{
+    return {"light"};
+}

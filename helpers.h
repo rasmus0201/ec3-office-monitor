@@ -65,6 +65,15 @@ namespace Bundsgaard
 
         return str;
     }
+
+    std::string pad_right(std::string const& str, size_t s, char padChar = ' ')
+    {
+        if (str.size() < s) {
+            return str + std::string(s-str.size(), padChar);
+        }
+
+        return str;
+    }
 }
 
 #endif

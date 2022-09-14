@@ -49,3 +49,8 @@ std::chrono::milliseconds DHTSensor::GetSleepTimeout()
 {
     return this->sleepFor;
 }
+
+std::vector<std::string> DHTSensor::GetSensorTypes()
+{
+    return {"humidity", "temperature"};
+}
