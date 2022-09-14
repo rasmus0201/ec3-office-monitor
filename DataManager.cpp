@@ -52,17 +52,30 @@ void DataManager::PushToCloud()
     // Construct the request body as JSON formatted string
     std::string json = "{\"data\":" + this->dataStore->ToJson() + "}";
 
-    // Do an API request
-    ApiResponse apiResponse = this->apiClient->Post(
-        ("/devices/" + std::to_string(DEVICE_ID) + "/measurements"),
-        json
-    );
+    bool successful = false;
 
-    // Check for errors
-    if (!apiResponse.success || apiResponse.code >= 300) {
-        printf("HttpRequest failed with code: %d, http status: %d\n", apiResponse.error, apiResponse.code);
+    for (int i = 0; i < 3; i++) {
+        // Do an API request
+        ApiResponse apiResponse = this->apiClient->Post(
+            ("/devices/" + std::to_string(DEVICE_ID) + "/measurements"),
+            json
+        );
 
-        // The request failed, so something really bad must have happened or is about to
+        // Check for errors
+        if (!apiResponse.success || apiResponse.code >= 300) {
+            printf("HttpRequest failed with code: %d, http status: %d\n", apiResponse.error, apiResponse.code);
+            wait_us(500 * 1000); // wait 500ms
+
+            continue;
+        }
+
+        // If succesful break the loop.
+        successful = true;
+        break;
+    }
+
+    if (!successful) {
+        // The request failed multiple times, so something really bad must have happened or is about to
         // To make the EC always run, we restart the program here.
         // There could be a better way of doing this, but this is the fastest solution atm.
         return NVIC_SystemReset();
