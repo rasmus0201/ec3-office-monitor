@@ -3,10 +3,10 @@
  * @author Rasmus Sørensen (bundsgaard.rasmus@gmail.com)
  * @brief Sensor manager header file
  * @version 0.1
- * @date 2020-08-20
- * 
- * @copyright Copyright (c) 2020
- * 
+ * @date 2022-09-14
+ *
+ * @copyright Copyright (c) 2022
+ *
  */
 
 #ifndef BUNDSGAARD_SENSOR_MANAGER_H
@@ -22,21 +22,21 @@ namespace Bundsgaard
 {
     /**
      * @brief Forward declaration (circular dependency)
-     * 
+     *
      */
     class SensorInterface;
 
     /**
      * @brief Used to control when the sensors collects data
-     * 
+     *
      */
     class SensorManager
     {
         public:
             /**
              * @brief Construct a new Sensor Manager object
-             * 
-             * @param manager 
+             *
+             * @param manager
              */
             SensorManager(DataManager* manager);
 
@@ -56,33 +56,33 @@ namespace Bundsgaard
 
             /**
              * @brief Start/run the thread
-             * 
+             *
              */
             void Run();
 
             /**
              * @brief Thread worker
-             * 
+             *
              */
             void Work();
 
             /**
              * @brief Add a sensor to the manager, to manage
-             * 
-             * @param sensor 
+             *
+             * @param sensor
              */
             void AddSensor(SensorInterface* sensor);
 
             /**
              * @brief Get the sensors
-             * 
+             *
              * @return vector<SensorInterface*>
              */
             vector<SensorInterface*> GetSensors();
 
             /**
              * @brief Get the underlying data collection
-             * 
+             *
              * @return Collection*
              */
             Collection* GetDataCollection();

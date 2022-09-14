@@ -3,9 +3,9 @@
  * @author Rasmus Sørensen (bundsgaard.rasmus@gmail.com)
  * @brief Collection element header file
  * @version 0.1
- * @date 2020-08-20
+ * @date 2022-09-14
  *
- * @copyright Copyright (c) 2020
+ * @copyright Copyright (c) 2022
  *
  */
 
