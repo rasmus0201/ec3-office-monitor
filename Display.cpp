@@ -144,6 +144,8 @@ void Display::ShowData()
         this->TextSpaceBetween("Time:", strTime, LINE(2));
     }
 
+    // Clean up variable.
+    // delete localeTime;
 
     Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = manager->GetSensorKeys();
