@@ -12,6 +12,7 @@
 #include <string>
 #include "http_response.h"
 #include "mbed.h"
+#include "rtos.h"
 #include "mbed_mem_trace.h"
 #include "mbedtls_entropy_config.h"
 #include "stm32746g_discovery_lcd.h"
