@@ -57,7 +57,7 @@ void setup();
  */
 int main()
 {
-    mbed_mem_trace_set_callback(mbed_mem_trace_default_callback);
+    // mbed_mem_trace_set_callback(mbed_mem_trace_default_callback);
 
     printf("Starting office monitor program\n");
 
