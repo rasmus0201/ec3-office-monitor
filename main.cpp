@@ -165,6 +165,7 @@ void setup()
     Location* location = new Location();
     location->SetLocationId(dataLocation["id"].as<int>());
     location->SetLocationName(std::string(dataLocation["name"].as<const char*>()));
+    location->SetLocationTimezone(dataLocation["timezoneOffset"].as<int32_t>());
     location->SetDeviceName(std::string(data["name"].as<const char*>()));
 
     for (JsonObject dataSensor : data["sensors"].as<JsonArray>()) {
