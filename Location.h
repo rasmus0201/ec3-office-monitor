@@ -59,8 +59,21 @@ namespace Bundsgaard
              */
             std::string GetDeviceName();
 
+            /**
+             * @brief Set the device timezone
+             *
+             * @param timezone
+             */
+            void SetLocationTimezone(int32_t timezone);
+
+            /**
+             * @brief Get the device timezone
+             */
+            int32_t GetLocationTimezone();
+
         private:
             uint32_t locationId;
+            int32_t timezone;
             std::string locationName;
             std::string deviceName;
     };

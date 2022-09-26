@@ -125,6 +125,8 @@ void Display::ShowData()
     );
 
     time_t currentTime = time(NULL);
+    currentTime += this->location->GetLocationTimezone();
+
     struct tm* localeTime;
     localeTime = localtime(&currentTime);
 
@@ -144,6 +146,8 @@ void Display::ShowData()
         this->TextSpaceBetween("Time:", strTime, LINE(2));
     }
 
+    // Clean up variable.
+    delete localeTime;
 
     Collection* collection = manager->GetDataCollection();
     vector<std::string> keys = manager->GetSensorKeys();

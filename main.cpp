@@ -12,6 +12,8 @@
 #include <string>
 #include "http_response.h"
 #include "mbed.h"
+#include "rtos.h"
+#include "mbed_mem_trace.h"
 #include "mbedtls_entropy_config.h"
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
@@ -25,6 +27,7 @@
 #include "Sensors.h"
 #include "SensorManager.h"
 
+// mbed-find-dangling-ptrs serial-log-file.txt BUILD/DISCO_F746NG/ARMC6/ec3-office-monitor.elf
 
 /** PINOUT
  * Led = D2
@@ -55,6 +58,8 @@ void setup();
  */
 int main()
 {
+    // mbed_mem_trace_set_callback(mbed_mem_trace_default_callback);
+
     printf("Starting office monitor program\n");
 
     display.SetStartVariables();
@@ -160,6 +165,7 @@ void setup()
     Location* location = new Location();
     location->SetLocationId(dataLocation["id"].as<int>());
     location->SetLocationName(std::string(dataLocation["name"].as<const char*>()));
+    location->SetLocationTimezone(dataLocation["timezoneOffset"].as<int32_t>());
     location->SetDeviceName(std::string(data["name"].as<const char*>()));
 
     for (JsonObject dataSensor : data["sensors"].as<JsonArray>()) {

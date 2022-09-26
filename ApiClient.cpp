@@ -56,55 +56,79 @@ ApiClient::~ApiClient()
 
 ApiResponse ApiClient::Get(std::string endpoint)
 {
-    HttpRequest request(
+    HttpRequest* request = new (std::nothrow) HttpRequest(
         this->net,
         this->socket,
         HTTP_GET,
         (API_BASE_URL + endpoint).c_str()
     );
 
-    request.set_header("Content-Type", "application/json");
-    request.set_header("Authorization", API_TOKEN);
+    if (request == NULL) {
+        struct ApiResponse ret = {
+            .success = false,
+            .error = NSAPI_ERROR_NO_MEMORY,
+            .code = 0,
+            .body = "",
+        };
+        return ret;
+    }
+
+    request->set_header("Content-Type", "application/json");
+    request->set_header("Authorization", API_TOKEN);
 
     // Cleaned by request destructor
-    HttpResponse* response = request.send();
+    HttpResponse* response = request->send();
 
     struct ApiResponse ret = {
-        .success = request.get_error() == NSAPI_ERROR_OK,
-        .error = request.get_error(),
+        .success = request->get_error() == NSAPI_ERROR_OK,
+        .error = request->get_error(),
         .code = response->get_status_code(),
         .body = response->get_body_as_string().c_str(),
     };
+
+    delete request;
 
     return ret;
 }
 
 ApiResponse ApiClient::Post(std::string endpoint, std::string body)
 {
-    HttpRequest request(
+    HttpRequest* request = new (std::nothrow) HttpRequest(
         this->net,
         this->socket,
         HTTP_POST,
         (API_BASE_URL + endpoint).c_str()
     );
 
-    request.set_header("Content-Type", "application/json");
-    request.set_header("Authorization", API_TOKEN);
+    if (request == NULL) {
+        printf("No request object could be made!\n");
+        struct ApiResponse ret = {
+            .success = false,
+            .error = NSAPI_ERROR_NO_MEMORY,
+            .code = 0,
+            .body = "",
+        };
+        return ret;
+    }
+
+    request->set_header("Content-Type", "application/json");
+    request->set_header("Authorization", API_TOKEN);
 
     char* contents = new char[body.size() + 1];
     strcpy(contents, body.c_str());
 
     // Cleaned by request destructor
-    HttpResponse* response = request.send(contents, strlen(contents));
+    HttpResponse* response = request->send(contents, strlen(contents));
 
     struct ApiResponse ret = {
-        .success = request.get_error() == NSAPI_ERROR_OK,
-        .error = request.get_error(),
+        .success = request->get_error() == NSAPI_ERROR_OK,
+        .error = request->get_error(),
         .code = response->get_status_code(),
         .body = response->get_body_as_string(),
     };
 
     delete[] contents;
+    delete request;
 
     return ret;
 }

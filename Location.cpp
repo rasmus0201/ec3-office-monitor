@@ -32,3 +32,13 @@ std::string Location::GetDeviceName()
 {
     return this->deviceName;
 }
+
+void Location::SetLocationTimezone(int32_t timezone)
+{
+    this->timezone = timezone;
+}
+
+int32_t Location::GetLocationTimezone()
+{
+    return this->timezone;
+}
